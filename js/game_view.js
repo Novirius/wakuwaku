@@ -8,6 +8,7 @@ export default class GameView {
         this.ctx = ctx;
         this.gameInstance = new Game();
         this.lastTime = new Date();
+        this.requestId = undefined;
         this.maxWidth = this.canvas.width - 300;
         this.minWidth = 300
         this.maxHeight = this.canvas.height - 300
@@ -21,28 +22,34 @@ export default class GameView {
         this.frame = 0;
     }
 
-    start () {
-        // this.game.bindEventListener(this.canvas);
-        requestAnimationFrame(this.animate.bind(this));
+  start () {
+    if (!this.requestId) {
+      this.gameInstance.bindEventListener(this.canvas);
+      this.gameInstance.beginTimer();
+      this.gameInstance.resetScene();
+      this.gameInstance.playMusic();
+      this.requestId = requestAnimationFrame(this.animate.bind(this));
     }
+  }
+
+  stop () {
+    if (this.requestId) {
+    this.gameInstance.bindEventListener(this.canvas);
+    this.gameInstance.beginTimer();
+    this.gameInstance.resetScene();
+    this.gameInstance.stopMusic();
+    cancelAnimationFrame(this.requestID);
+    }
+  }
 
   animate () {
     let currentTime = Date.now();
     let delta = (currentTime - this.lastTime)/1000;
-    let fps = (1/60);
-    // console.log(delta)
-    this.ctx.clearRect(0,0,5000, 5000);
-    this.orb.draw(this.ctx, delta);
-    this.frame += 1;
-    // if (this.frame > 20) {
-    //   this.orb2.draw(this.ctx, delta)
-    // }
-    // if (this.frame > 40) {
-    //   this.orb3.draw(this.ctx, delta)
-    // }
-    // this.game.step(delta);
-    // this.game.draw(this.ctx);
     this.lastTime = currentTime;
+    this.ctx.clearRect(0,0,5000, 5000);
+    this.gameInstance.draw();
+    this.game.mouseStep(delta);
+    this.game.draw(this.ctx);
     requestAnimationFrame(this.animate.bind(this));
   }
 }
