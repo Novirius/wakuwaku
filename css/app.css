@@ -5,6 +5,7 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    font-family: 'Karla', sans-serif;
 
     cursor: url('https://i.imgur.com/mAjwtNY.png') 16 16, auto;
   }
@@ -15,6 +16,8 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover; */
+    font-family: 'Karla', sans-serif;
+
 }
 
 @keyframes fadein {

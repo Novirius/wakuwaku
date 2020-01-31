@@ -7,7 +7,7 @@ import * as cursor from './cursor';
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("game-canvas");
     const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
+    canvas.width = window.innerWidth * 0.7;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
     // let orb1 = new Orb(200, 200, 50, CONSTANT.ORANGE , 3, 30, 3);

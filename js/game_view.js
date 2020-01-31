@@ -14,7 +14,7 @@ export default class GameView {
         this.safeWidth = (Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth;
         this.safeHeight = (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight;
         // this.orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 1, 150, 0.20);
-        this.orb = new Orb(200, 200, 50, CONSTANT.BLUE , 1, 150, 0.20);
+        this.orb = new Orb(500, 500, 50, 'RED', 2, 150, 5);
         this.orb2 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 2, 150, 0.2);
         this.orb3 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 3, 150, 0.2);
         this.frame = 0;
@@ -31,7 +31,7 @@ export default class GameView {
     let fps = (1/60);
     // console.log(delta)
     this.ctx.clearRect(0,0,5000, 5000);
-    this.orb.draw(this.ctx, fps, this.canvas);
+    this.orb.draw(this.ctx, delta);
     this.frame += 1;
     // if (this.frame > 20) {
     //   this.orb2.draw(this.ctx, delta)
