@@ -1,0 +1,58 @@
+
+html { 
+    background: linear-gradient(rgba(0, 0, 0, 0.90), rgba(0, 0, 0, 0.90)), url('https://media.giphy.com/media/x5DMgtkXuA3JK/giphy.gif') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    cursor: url('https://i.imgur.com/mAjwtNY.png') 16 16, auto;
+  }
+
+body {
+    /* background-color: black; */
+    /* background-image: url('https://media.giphy.com/media/l0Iy2h5eJLf4O2b4c/giphy.gif');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover; */
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+        top: 0px;
+    }
+
+    100% {
+        opacity: 1;
+        top: -10px;
+    }
+}
+
+.fadein {
+    animation-name: fadein;
+    animation-duration: 2s;
+}
+
+
+body {
+    overflow: hidden;
+  }
+  div {
+    position: absolute;
+    border-radius:50%;
+    left: 0;
+    top: 0;
+  }
+
+  body {
+    overflow: hidden;
+    height: 100vh;
+    touch-action: none;
+  }
+  div {
+    position: absolute;
+    border-radius:50%;
+    left: 0;
+    top: 0;
+  }
