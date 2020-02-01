@@ -1,7 +1,7 @@
 import * as CONSTANT from './constants.js';
 
 export default class Orbs {
-    constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer) {
+    constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer, game) {
         //Variables
         this.centerX = centerX;
         this.centerY = centerY;
@@ -19,6 +19,7 @@ export default class Orbs {
         this.active = 'active'
         this.frame = 0;
         this.time = 0;
+        this.game = game;
         //Functions
         this.activeOrb = this.activeOrb.bind(this);
         this.expireOrb = this.expireOrb.bind(this);
@@ -29,7 +30,7 @@ export default class Orbs {
     }
 
     //Timer Ring: Shows time remaining before orb expires. Decreases in size closer to expiration.
-    // (this.initialRingRadius/(20 * this.timer))
+    //IMPORTANT: ringRadius is the ADDITIONAL radius added on to circle radius. newRingRadius is circleRadius + ringRadius
     timerSize (dt) {
         this.ringRadius = this.ringRadius - ((this.initialRingRadius/(this.timer)) * dt*3)
         if (this.ringRadius < 0) {
@@ -116,6 +117,9 @@ export default class Orbs {
         else {
             // alert(`${this.frame} in ${this.time}s`)
             this.expireOrb(ctx);
+        }
+        if (this.alpha === 0) {
+            this.game.removeObject();
         }
     }
     // draw (ctx, dt, canvas) {

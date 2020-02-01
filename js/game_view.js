@@ -6,17 +6,13 @@ export default class GameView {
     constructor(canvas, ctx){
         this.canvas = canvas;
         this.ctx = ctx;
-        this.gameInstance = new Game();
+        this.gameInstance = new Game(canvas, ctx);
         this.lastTime = new Date();
         this.requestId = undefined;
-        this.maxWidth = this.canvas.width - 300;
-        this.minWidth = 300
-        this.maxHeight = this.canvas.height - 300
-        this.minHeight = 300
-        this.safeWidth = (Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth;
-        this.safeHeight = (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight;
-        // this.orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 1, 150, 0.20);
-        this.orb = new Orb(500, 500, 50, 'RED', 2, 150, 0.5);
+
+
+        this.orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 1, 150, 0.20);
+        // this.orb = new Orb(500, 500, 50, 'RED', 2, 150, 0.5);
         this.orb2 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 2, 150, 0.2);
         this.orb3 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 3, 150, 0.2);
         this.frame = 0;
@@ -25,31 +21,30 @@ export default class GameView {
   start () {
     if (!this.requestId) {
       this.gameInstance.bindEventListener(this.canvas);
-      this.gameInstance.beginTimer();
-      this.gameInstance.resetScene();
-      this.gameInstance.playMusic();
+      // this.gameInstance.beginTimer();
+      // this.gameInstance.resetScene();
+      // this.gameInstance.playMusic();
       this.requestId = requestAnimationFrame(this.animate.bind(this));
     }
   }
 
   stop () {
     if (this.requestId) {
-    this.gameInstance.bindEventListener(this.canvas);
-    this.gameInstance.beginTimer();
-    this.gameInstance.resetScene();
-    this.gameInstance.stopMusic();
+    // this.gameInstance.bindEventListener(this.canvas);
+    // this.gameInstance.beginTimer();
+    // this.gameInstance.resetScene();
+    // this.gameInstance.stopMusic();
     cancelAnimationFrame(this.requestID);
     }
   }
 
   animate () {
     let currentTime = Date.now();
-    let delta = (currentTime - this.lastTime)/1000;
+    let dt = (currentTime - this.lastTime)/1000;
     this.lastTime = currentTime;
     this.ctx.clearRect(0,0,5000, 5000);
-    this.gameInstance.draw();
-    this.game.mouseStep(delta);
-    this.game.draw(this.ctx);
+    this.gameInstance.draw(this.ctx, dt);
+    // this.game.mouseStep(delta);
     requestAnimationFrame(this.animate.bind(this));
   }
 }
