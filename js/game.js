@@ -1,4 +1,5 @@
 import Orb from './orbs';
+import Particle from './particle'
 import * as CONSTANT from './constants';
 
 export default class Game {
@@ -23,21 +24,55 @@ export default class Game {
         this.objects = [];
         //Function
         this.bindEventListener = this.bindEventListener.bind(this);
+        this.draw = this.draw.bind(this);
+        this.increasePlayTime = this.increasePlayTime.bind(this);
+        this.removeObject = this.removeObject.bind(this);
+        this.generateOrb = this.generateOrb.bind(this);
+        
+    }
+
+    increasePlayTime (dt) {
+        // console.log(dt)
+        this.playTime += dt
     }
 
     removeObject () {
         this.objects.shift();
     }
 
-    generateOrb () {
+    generateManyOrbs () {
+        //Select random color
         const randomColorIndex = Math.floor(Math.random()*CONSTANT.COLORS_ARRAY.length);
         const randomColor = CONSTANT.COLORS_ARRAY[randomColorIndex];
-        const orb1 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, randomColor , 1, 150, 3, this)
-        this.objects.push(orb1)
+        //Select random of numbers to display
+        const randomRange = Math.floor(Math.random()*7) + 1;
+        let timer = 0.5;
+        let callback;
+        for (let i = 1; i < (randomRange+1); i++) {
+            if (i === randomRange) {
+                callback = true;
+            }
+            else {
+                callback = false;
+            }
+            this.generateOrb(randomColor, i, timer, callback)
+        }
     }
 
-    bindEventListener(canvas) {
-        canvas.addEventListener('mousemove', (event) => {
+    generateOrb (color, number, timer, callback) {
+
+        //Select random Arc
+        const randomShortArcIndex = Math.floor(Math.random()*CONSTANT.SHORT_ARCS_ARRAY.length);
+        const randomShortArc = CONSTANT.SHORT_ARCS_ARRAY[randomShortArcIndex];
+
+        //Create Orb
+        const orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, color , number, 150, timer, this, callback)
+        setTimeout(() => this.objects.push(orb), (number-1) * (timer * 1000))
+        
+    }
+
+    bindEventListener() {
+        this.canvas.addEventListener('mousemove', (event) => {
             this.mousePosX = event.clientX;
             this.mousePosY = event.clientY;
         })
@@ -54,17 +89,22 @@ export default class Game {
                 case 82:
                     this.generateOrb();
                     console.log('testtop')
-                    console.log(`${this.objects}`)
+                    console.log(`${this.playTime}`)
                     console.log('testbottom')
                 default:
                     break;
             }
         })
+        
+        
     }
 
     draw (ctx, dt) {
+        // let particle1 = new Particle(this.mousePosX, this.mousePosY, 5, 'yellow')
+        // particle1.update(ctx);
         this.objects.forEach((object) => {
             object.draw(ctx, dt);
         })
+
     }
 }

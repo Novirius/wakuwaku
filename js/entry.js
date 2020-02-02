@@ -1,13 +1,13 @@
 import * as CONSTANT from './constants';
 import Orb from './orbs';
 import GameView from './game_view.js';
-import * as cursor from './cursor';
 import Game from './game';
 
 // Create the canvas
 document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("game-canvas");
     const ctx = canvas.getContext("2d");
+    ctx.globalCompositeOperation = 'destination-over'
     canvas.width = window.innerWidth * 0.85;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
 })
 
-addEventListener('mousedown', e => console.log(e))
+// addEventListener('mousedown', e => console.log(e))
 // addEventListener('mousemove', e => console.log(e))
+// addEventListener('mousedown', e => console.log(e))
 

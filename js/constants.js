@@ -1,5 +1,7 @@
 export const COLORS_ARRAY = ['BLUE','RED']
 
+export const SHORT_ARCS_ARRAY = ['bottomRight','bottomLeft','topLeft','topRight']
+
 export const BLUE = {
     circleLight: (grd, alpha) =>  grd.addColorStop(1.000, 'rgba(78, 102, 150, '+alpha+')'),
     circleDark: (grd, alpha) =>  grd.addColorStop(0.000, 'rgba(24, 49, 73, '+alpha+')'),

@@ -10,7 +10,7 @@ export default class GameView {
         this.lastTime = new Date();
         this.requestId = undefined;
 
-
+        
         this.orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 1, 150, 0.20);
         // this.orb = new Orb(500, 500, 50, 'RED', 2, 150, 0.5);
         this.orb2 = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, CONSTANT.BLUE , 2, 150, 0.2);
@@ -20,7 +20,8 @@ export default class GameView {
 
   start () {
     if (!this.requestId) {
-      this.gameInstance.bindEventListener(this.canvas);
+      this.gameInstance.bindEventListener();
+      this.gameInstance.generateManyOrbs ();
       // this.gameInstance.beginTimer();
       // this.gameInstance.resetScene();
       // this.gameInstance.playMusic();
@@ -43,6 +44,7 @@ export default class GameView {
     let dt = (currentTime - this.lastTime)/1000;
     this.lastTime = currentTime;
     this.ctx.clearRect(0,0,5000, 5000);
+    this.gameInstance.increasePlayTime(dt)
     this.gameInstance.draw(this.ctx, dt);
     // this.game.mouseStep(delta);
     requestAnimationFrame(this.animate.bind(this));

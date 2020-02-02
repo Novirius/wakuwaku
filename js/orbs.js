@@ -1,6 +1,6 @@
 import * as CONSTANT from './constants.js';
 
-export default class Orbs {
+export default class Orb {
     constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer, game) {
         //Variables
         this.centerX = centerX;
@@ -20,6 +20,7 @@ export default class Orbs {
         this.frame = 0;
         this.time = 0;
         this.game = game;
+        this.path;
         //Functions
         this.activeOrb = this.activeOrb.bind(this);
         this.expireOrb = this.expireOrb.bind(this);
@@ -85,12 +86,13 @@ export default class Orbs {
         ctx.strokeStyle = grd2;
         ctx.stroke();
         ctx.closePath();
-        //Circle
+        // //Circle
         ctx.beginPath();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
         let grd = ctx.createRadialGradient(this.centerX, this.centerY, this.circleRadius, this.centerX, this.centerY, 20);
         CONSTANT[this.color].circleLight(grd, this.alpha);
         CONSTANT[this.color].circleDark(grd, this.alpha);
-        ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
         ctx.fillStyle = grd;
         ctx.fill();
         ctx.lineWidth = 5;
@@ -98,13 +100,15 @@ export default class Orbs {
         ctx.stroke();
         ctx.save();
         ctx.closePath();
+        //Testing
+
+
         //Text font, color, and positioning
         ctx.font = "30px Sans-Serif";
         ctx.fillStyle = 'white';
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillText(this.label, this.centerX, this.centerY);
-        ctx.addHitRegion
     }
 
     draw (ctx, dt) {
@@ -113,6 +117,11 @@ export default class Orbs {
         //It never reahes zero since it subtracts a percentage of its current radius
         if (this.active != 'expire') {
             this.activeOrb(ctx, dt);
+
+            //TESTING TOP
+
+
+            //TESTING BOTTOM
         }
         else {
             // alert(`${this.frame} in ${this.time}s`)
