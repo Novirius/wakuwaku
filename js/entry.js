@@ -11,10 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.width = window.innerWidth * 0.85;
     canvas.height = window.innerHeight;
     document.body.appendChild(canvas);
-    // let orb1 = new Orb(200, 200, 50, CONSTANT.ORANGE , 3, 30, 3);
-    // orb1.draw(ctx, 0.2);
-    let game1 = new GameView(canvas,ctx);
-    game1.start();
+    const game = new GameView(canvas,ctx);
+    // game.start();
+    const welcomeSplash = document.getElementById('welcome-splash')
+    const playButton = document.getElementById('play-button')
+    playButton.addEventListener('click', () => {
+        welcomeSplash.classList.add("hide");
+        setTimeout(() => game.start(), 3000)
+    })
     
 })
 

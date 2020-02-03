@@ -43,7 +43,7 @@ export default class GameView {
     let currentTime = Date.now();
     let dt = (currentTime - this.lastTime)/1000;
     this.lastTime = currentTime;
-    this.ctx.clearRect(0,0,5000, 5000);
+    this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
     this.gameInstance.increasePlayTime(dt)
     this.gameInstance.draw(this.ctx, dt);
     // this.game.mouseStep(delta);

@@ -1,6 +1,7 @@
 import Orb from './orbs';
 import Particle from './particle'
 import * as CONSTANT from './constants';
+import Health from './health';
 
 export default class Game {
     constructor(canvas, ctx) {
@@ -11,6 +12,7 @@ export default class Game {
         //Mousemove tracker
         this.mousePosX = 0;
         this.mousePosY = 0;
+        this.clickable = true;
         //Dimensions
         this.maxWidth = this.canvas.width - 300;
         this.minWidth = 300
@@ -20,7 +22,11 @@ export default class Game {
         this.safeHeight = (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight;
         // this.orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, 'BLUE' , 1, 150, 3);
         // this.orb = new Orb(300, 300, 50, 'BLUE' , 1, 150, 3);
+        //Orb sizing
+        this.orbSize = 75;
+        this.ringSize = this.orbSize * 3;
         //Objects
+        this.health = new Health((1/600), 5, this)
         this.objects = [];
         //Function
         this.bindEventListener = this.bindEventListener.bind(this);
@@ -38,6 +44,7 @@ export default class Game {
 
     removeObject () {
         this.objects.shift();
+        this.clickable = true;
     }
 
     generateManyOrbs () {
@@ -46,7 +53,7 @@ export default class Game {
         const randomColor = CONSTANT.COLORS_ARRAY[randomColorIndex];
         //Select random of numbers to display
         const randomRange = Math.floor(Math.random()*7) + 1;
-        let timer = 0.5;
+        let timer = 5;
         let callback;
         for (let i = 1; i < (randomRange+1); i++) {
             if (i === randomRange) {
@@ -60,14 +67,13 @@ export default class Game {
     }
 
     generateOrb (color, number, timer, callback) {
-
         //Select random Arc
         const randomShortArcIndex = Math.floor(Math.random()*CONSTANT.SHORT_ARCS_ARRAY.length);
         const randomShortArc = CONSTANT.SHORT_ARCS_ARRAY[randomShortArcIndex];
 
         //Create Orb
-        const orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, 50, color , number, 150, timer, this, callback)
-        setTimeout(() => this.objects.push(orb), (number-1) * (timer * 1000))
+        const orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, this.orbSize, color , number, this.ringSize, timer, this, callback)
+        setTimeout(() => this.objects.push(orb), (number-1) * (timer * 500))
         
     }
 
@@ -77,11 +83,43 @@ export default class Game {
             this.mousePosY = event.clientY;
         })
         window.addEventListener("keydown", (event) => {
+            let hitSound = new Audio();
+            hitSound.src = "assets/music/taiko.wav";
+            hitSound.loop = false;
+            let missSound = new Audio();
+            missSound.src = "assets/music/whoosh.mp3";
+            missSound.loop = false;
             switch(event.keyCode) {
                 case 88:
                     if (this.objects[0] instanceof Orb) {
                         if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-                            this.objects[0].active = 'expire';
+                            if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                                this.clickable = false;
+                                this.objects[0].active = 'expire';
+                                hitSound.play();
+                                //perfect points
+                            }
+                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                                this.clickable = false;
+                                this.objects[0].active = 'expire';
+                                hitSound.play();
+                                //Good points
+                            }
+                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.6)) && this.clickable) {
+                                this.clickable = false;
+                                this.objects[0].active = 'expire';
+                                hitSound.play();
+                                //Poor points
+                            }
+                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+                                this.clickable = false;
+                                missSound.play();
+                                //No points
+                            }
+                            else {
+
+                            }
+                            
                         }
                     }
                     // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
@@ -99,6 +137,10 @@ export default class Game {
         
     }
 
+    update (ctx, dt) {
+
+    }
+
     draw (ctx, dt) {
         // let particle1 = new Particle(this.mousePosX, this.mousePosY, 5, 'yellow')
         // particle1.update(ctx);
@@ -106,5 +148,33 @@ export default class Game {
             object.draw(ctx, dt);
         })
 
+        //Draw line between groups of orbs
+        if (this.objects[1]) {
+            ctx.beginPath();
+
+            let angle = Math.random() * 360;
+            let angleDlt = 60;
+            let step = 1;
+
+            let grd = ctx.createLinearGradient(0, 0, 500, 0);
+            grd.addColorStop(0, "hsl(" + (angle % 360) + ",100%, 50%)");
+            grd.addColorStop(0.5, "hsl(" + ((angle + (angleDlt/2)) % 360) + ",100%, 50%)");
+            grd.addColorStop(1, "hsl(" + ((angle + angleDlt) % 360) + ",100%, 50%)");
+
+            ctx.moveTo(this.objects[0].centerX, this.objects[0].centerY);
+            ctx.lineTo(this.objects[1].centerX, this.objects[1].centerY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = grd;
+            ctx.setLineDash([2, 5]);
+            ctx.stroke();
+            angle+= step;
+            ctx.closePath();
+            ctx.setLineDash([]);
+        }
+
+        //Draw cursor
+
     }
+
+
 }

@@ -39,7 +39,7 @@ body {
 
 
 body {
-    overflow: hidden;
+    /* overflow: hidden;
   }
   div {
     position: absolute;
@@ -57,5 +57,42 @@ body {
     position: absolute;
     border-radius:50%;
     left: 0;
-    top: 0;
+    top: 0; */
+  }
+
+
+#container {
+  position: relative;
+
+}
+
+  #welcome-splash {
+    position: absolute;
+    color: white;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  #welcome-splash button {
+    padding: 15px 10px;
+    background-color: #e8689b;
+    font-size: 16px;
+    color: white;
+  }
+
+  #welcome-splash button:hover {
+    background-color: #ffd224;
+    color: #292929;
+    cursor: pointer;
+  }
+
+  .hide {
+    display: none !important;
   }

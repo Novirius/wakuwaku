@@ -1,7 +1,7 @@
 import * as CONSTANT from './constants.js';
 
 export default class Orb {
-    constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer, game) {
+    constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer, game, callback) {
         //Variables
         this.centerX = centerX;
         this.centerY = centerY;
@@ -12,7 +12,6 @@ export default class Orb {
         this.label = label;
         this.ringRadius = ringRadius;
         this.timer = timer;
-        this.timerSize = this.timerSize.bind(this);
         this.alpha = 0.7;
         this.alphaPerFrame = 0.04;
         this.growthPerFrame = (circleRadius*3)/(circleRadius);
@@ -21,7 +20,9 @@ export default class Orb {
         this.time = 0;
         this.game = game;
         this.path;
+        this.callback = callback;
         //Functions
+        this.timerSize = this.timerSize.bind(this);
         this.activeOrb = this.activeOrb.bind(this);
         this.expireOrb = this.expireOrb.bind(this);
         this.draw = this.draw.bind(this);
@@ -59,7 +60,7 @@ export default class Orb {
         //Circle
         ctx.beginPath();
         this.expandRadiusFadeOut();
-        let grd = ctx.createRadialGradient(this.centerX, this.centerY, this.circleRadius, this.centerX, this.centerY, 20);
+        let grd = ctx.createRadialGradient(this.centerX, this.centerY, this.circleRadius, this.centerX, this.centerY, 30);
         CONSTANT[this.color].circleLight(grd, this.alpha);
         CONSTANT[this.color].circleDark(grd, this.alpha);
         ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
@@ -95,7 +96,7 @@ export default class Orb {
         CONSTANT[this.color].circleDark(grd, this.alpha);
         ctx.fillStyle = grd;
         ctx.fill();
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 10;
         ctx.strokeStyle = CONSTANT[this.color].circleEdge;
         ctx.stroke();
         ctx.save();
@@ -129,6 +130,9 @@ export default class Orb {
         }
         if (this.alpha === 0) {
             this.game.removeObject();
+            if (this.callback === true) {
+                this.game.generateManyOrbs();
+            }
         }
     }
     // draw (ctx, dt, canvas) {
@@ -146,19 +150,6 @@ export default class Orb {
     //     ctx.strokeStyle = '#16151f';
     //     ctx.stroke();
     //     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    //     ctx.closePath();
-    //     //Circle
-    //     ctx.beginPath();
-    //     let grd = ctx.createRadialGradient(this.centerX, this.centerY, this.circleRadius, this.centerX, this.centerY, 20);
-    //     grd.addColorStop(0.000, 'rgba(24, 49, 73, 0.2)');
-    //     grd.addColorStop(1.000, 'rgba(78, 102, 150, 0.2)');
-    //     ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
-    //     ctx.fillStyle = grd;
-    //     ctx.fill();
-    //     ctx.lineWidth = 5;
-    //     ctx.strokeStyle = this.color.outterRing;
-    //     ctx.stroke();
-    //     ctx.save();
     //     ctx.closePath();
 
     // }
