@@ -404,7 +404,7 @@ function () {
       if (this.playTime < 40) {
         timer = 1.2;
       } else if (this.playTime > 39 && this.playTime < 60) {
-        timer = 0.5;
+        timer = 0.7;
       } else if (this.playTime > 59 && this.playTime < 80) {
         timer = 1;
       } else if (this.playTime > 79 && this.playTime < 110) {
@@ -704,7 +704,12 @@ function () {
   _createClass(Health, [{
     key: "miss",
     value: function miss() {
-      this.value = this.value - 1; // console.log(this.value)
+      // if (this.cooldown = true) {
+      //     this.cooldown = false;
+      //     let that = this;
+      //     setTimeout(() => that.cooldown = true, 1)
+      // }
+      this.value = this.value - 0.5; // console.log(this.value)
     }
   }, {
     key: "perfect",
@@ -728,6 +733,8 @@ function () {
 
       if (this.value <= 0) {
         this.gameView.stop(); // alert('gameover')
+      } else if (this.value > 100) {
+        this.value === 100;
       } // console.log(this.value)
 
     }
@@ -854,7 +861,7 @@ function () {
   }, {
     key: "checkActive",
     value: function checkActive() {
-      if (this.ringRadius === 0) {
+      if (this.ringRadius < 1) {
         this.active = 'expire';
         this.game.makeClickable();
         this.game.expireOrbPointsReduction();
