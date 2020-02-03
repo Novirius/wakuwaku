@@ -46,20 +46,20 @@ export default class Health {
             this.gameView.stop();
             // alert('gameover')
         }
-        else if (this.value > 100) {
-            this.value === 100;
+        if (this.value > 100) {
+            this.value = 100;
         }
         // console.log(this.value)
     }
 
     outlineHP (ctx) {
         ctx.beginPath();
+        if (this.value > 100) {
+            this.value = 100;
+        }
         let calcCurrentHP = ((this.gameInstance.canvas.width * 0.5) * (this.value/100));
         let currentHP;
-        if (calcCurrentHP > (this.gameInstance.canvas.width * 0.5)) {
-            currentHP = (this.gameInstance.canvas.width * 0.5);
-        }
-        else if (calcCurrentHP < 0) {
+        if (calcCurrentHP <= 0) {
             currentHP = 0;
         }
         else {
