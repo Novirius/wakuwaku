@@ -52,7 +52,7 @@ export default class Orb {
     }
 
     checkActive () {
-        if (this.ringRadius === 0) {
+        if (this.ringRadius < 1) {
             this.active = 'expire'
             this.game.makeClickable();
             this.game.expireOrbPointsReduction();

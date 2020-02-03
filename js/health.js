@@ -16,7 +16,12 @@ export default class Health {
     }
 
     miss () {
-        this.value = this.value - 1;
+        // if (this.cooldown = true) {
+        //     this.cooldown = false;
+        //     let that = this;
+        //     setTimeout(() => that.cooldown = true, 1)
+        // }
+        this.value = this.value - 0.5;
         // console.log(this.value)
     }
 
@@ -40,6 +45,9 @@ export default class Health {
         if (this.value <= 0) {
             this.gameView.stop();
             // alert('gameover')
+        }
+        else if (this.value > 100) {
+            this.value === 100;
         }
         // console.log(this.value)
     }
