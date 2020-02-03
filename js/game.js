@@ -66,7 +66,7 @@ export default class Game {
     increasePlayTime (dt) {
         // console.log(dt)
         this.playTime += dt
-        if (this.playTime > 137) {
+        if (this.playTime > 150) {
             this.gameView.stop();
         }
     }
@@ -93,13 +93,13 @@ export default class Game {
             timer = 1.2
         }
         else if ((this.playTime > 39) && (this.playTime < 60)) {
-            timer = 1
+            timer = 0.5
         }
         else if ((this.playTime > 59) && (this.playTime < 80)) {
-            timer = 0.8
+            timer = 1
         }
         else if ((this.playTime > 79) && (this.playTime < 110)) {
-            timer = 1.2
+            timer = 0.8
         }
         else {
             timer = 1
