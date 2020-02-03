@@ -1,34 +1,78 @@
 export default class Health {
-    constructor(decay, gain, gameInstance){
+    constructor(decay, gain, gameInstance, gameView){
         this.gameInstance = gameInstance;
-        this.gameView = this.gameView;
+        this.gameView = gameView;
         this.value = 100;
         this.decay = decay;
         this.gain = gain;
+        //Functions
+        this.miss = this.miss.bind(this);
+        this.perfect = this.perfect.bind(this);
+        this.good = this.good.bind(this);
+        this.poor = this.poor.bind(this);
+        this.update = this.update.bind(this);
+        this.outlineHP = this.outlineHP.bind(this);
+        this.draw = this.draw.bind(this);
     }
 
     miss () {
-        this.value = this.value - 5;
+        this.value = this.value - 1;
+        // console.log(this.value)
     }
 
-    gain () {
+    perfect () {
+        this.value = this.value + 10;
+        // console.log(this.value)
+    }
+
+    good () {
         this.value = this.value + 5;
+        // console.log(this.value)
+    }
+
+    poor () {
+        this.value = this.value + 2;
+        // console.log(this.value)
     }
 
     update () {
         this.value -= this.decay;
+        if (this.value <= 0) {
+            this.gameView.stop();
+            // alert('gameover')
+        }
+        // console.log(this.value)
     }
 
-    outline () {
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
+    outlineHP (ctx) {
         ctx.beginPath();
-        ctx.rect(20, 20, 150, 100);
+        let calcCurrentHP = ((this.gameInstance.canvas.width * 0.5) * (this.value/100));
+        let currentHP;
+        if (calcCurrentHP > (this.gameInstance.canvas.width * 0.5)) {
+            currentHP = (this.gameInstance.canvas.width * 0.5);
+        }
+        else if (calcCurrentHP < 0) {
+            currentHP = 0;
+        }
+        else {
+            currentHP = calcCurrentHP;
+        }
+        ctx.rect(20, 20, currentHP, 20);
         ctx.closePath();
     }
 
     draw (ctx) {
-        this.outline();
-        ctx.fillStyle = 'red';
+        this.update();
+        this.outlineHP(ctx);
+        //Color the damn thing
+        let grd = ctx.createLinearGradient(0, 0, (this.gameInstance.canvas.width * 0.5), 0);
+        grd.addColorStop(0.000, 'rgba(238, 181, 255, 1.000)');
+        grd.addColorStop(0.495, 'rgba(191, 241, 255, 1.000)');
+        grd.addColorStop(1.000, 'rgba(247, 252, 184, 1.000)');
+
+        ctx.fillStyle = grd;
+        ctx.fill();
+        console.log(this.value);
+        // console.log('hi')
     }
 }

@@ -1,4 +1,5 @@
 import * as CONSTANT from './constants.js';
+import Health from './health';
 
 export default class Orb {
     constructor(centerX, centerY, circleRadius, color, label, ringRadius, timer, game, callback) {
@@ -13,7 +14,7 @@ export default class Orb {
         this.ringRadius = ringRadius;
         this.timer = timer;
         this.alpha = 0.7;
-        this.alphaPerFrame = 0.04;
+        this.alphaPerFrame = timer > 1 ? 0.04 : 0.08
         this.growthPerFrame = (circleRadius*3)/(circleRadius);
         this.active = 'active'
         this.frame = 0;
@@ -53,6 +54,9 @@ export default class Orb {
     checkActive () {
         if (this.ringRadius === 0) {
             this.active = 'expire'
+            this.game.makeClickable();
+            this.game.expireOrbPointsReduction();
+
         }
     }
 

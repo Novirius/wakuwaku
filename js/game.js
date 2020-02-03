@@ -2,13 +2,16 @@ import Orb from './orbs';
 import Particle from './particle'
 import * as CONSTANT from './constants';
 import Health from './health';
+import anime from 'animejs/lib/anime.es.js';
+
 
 export default class Game {
-    constructor(canvas, ctx) {
+    constructor(canvas, ctx, gameView) {
         //Game board
         this.canvas = canvas;
         this.ctx = ctx;
         this.playTime = 0;
+        this.gameView = gameView;
         //Mousemove tracker
         this.mousePosX = 0;
         this.mousePosY = 0;
@@ -26,26 +29,57 @@ export default class Game {
         this.orbSize = 75;
         this.ringSize = this.orbSize * 3;
         //Objects
-        this.health = new Health((1/600), 5, this)
+        this.health = new Health(1/20, 5, this, this.gameView)
         this.objects = [];
+        //Points
+        this.points = 0;
+        //Music
+        this.bgm = new Audio();
+        this.gameOverSFX = new Audio ();
         //Function
         this.bindEventListener = this.bindEventListener.bind(this);
         this.draw = this.draw.bind(this);
         this.increasePlayTime = this.increasePlayTime.bind(this);
         this.removeObject = this.removeObject.bind(this);
         this.generateOrb = this.generateOrb.bind(this);
+        this.makeClickable = this.makeClickable.bind(this);
+        this.expireOrbPointsReduction = this.expireOrbPointsReduction.bind(this);
+        this.playMusic = this.playMusic.bind(this);
+        this.stopMusic = this.stopMusic.bind(this);
+    }
+
+    playMusic() {
+        this.bgm.src = "assets/music/bgm2.mp3";
+        this.bgm.loop = false;
+        this.bgm.play();
+
+        this.gameOverSFX.src = "assets/music/gameoversfx.wav";
+        this.gameOverSFX.loop = false;
+    }
+
+    stopMusic() {
+        this.bgm.pause();
+        setTimeout(()=>this.gameOverSFX.play(), 1000)
         
     }
 
     increasePlayTime (dt) {
         // console.log(dt)
         this.playTime += dt
+        if (this.playTime > 137) {
+            this.gameView.stop();
+        }
+    }
+
+    makeClickable () {
+        this.clickable = true;
     }
 
     removeObject () {
         this.objects.shift();
-        this.clickable = true;
+        this.makeClickable();
     }
+
 
     generateManyOrbs () {
         //Select random color
@@ -53,7 +87,23 @@ export default class Game {
         const randomColor = CONSTANT.COLORS_ARRAY[randomColorIndex];
         //Select random of numbers to display
         const randomRange = Math.floor(Math.random()*7) + 1;
-        let timer = 5;
+
+        let timer = 1;
+        if (this.playTime < 40) {
+            timer = 1.2
+        }
+        else if ((this.playTime > 39) && (this.playTime < 60)) {
+            timer = 1
+        }
+        else if ((this.playTime > 59) && (this.playTime < 80)) {
+            timer = 0.8
+        }
+        else if ((this.playTime > 79) && (this.playTime < 110)) {
+            timer = 1.2
+        }
+        else {
+            timer = 1
+        }
         let callback;
         for (let i = 1; i < (randomRange+1); i++) {
             if (i === randomRange) {
@@ -77,6 +127,10 @@ export default class Game {
         
     }
 
+    expireOrbPointsReduction () {
+        this.health.miss();
+    }
+
     bindEventListener() {
         this.canvas.addEventListener('mousemove', (event) => {
             this.mousePosX = event.clientX;
@@ -96,19 +150,25 @@ export default class Game {
                             if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
                                 this.clickable = false;
                                 this.objects[0].active = 'expire';
+                                this.health.perfect();
                                 hitSound.play();
+                                this.points += 1000
                                 //perfect points
                             }
                             else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
                                 this.clickable = false;
                                 this.objects[0].active = 'expire';
+                                this.health.good();
                                 hitSound.play();
+                                this.points += 500
                                 //Good points
                             }
                             else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.6)) && this.clickable) {
                                 this.clickable = false;
                                 this.objects[0].active = 'expire';
+                                this.health.poor();
                                 hitSound.play();
+                                this.points += 100
                                 //Poor points
                             }
                             else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
@@ -117,9 +177,7 @@ export default class Game {
                                 //No points
                             }
                             else {
-
                             }
-                            
                         }
                     }
                     // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
@@ -127,7 +185,7 @@ export default class Game {
                 case 82:
                     this.generateOrb();
                     console.log('testtop')
-                    console.log(`${this.playTime}`)
+                    // console.log(`${this.playTime}`)
                     console.log('testbottom')
                 default:
                     break;
@@ -142,7 +200,8 @@ export default class Game {
     }
 
     draw (ctx, dt) {
-        // let particle1 = new Particle(this.mousePosX, this.mousePosY, 5, 'yellow')
+        //Draw health
+        this.health.draw(ctx);
         // particle1.update(ctx);
         this.objects.forEach((object) => {
             object.draw(ctx, dt);
@@ -172,7 +231,24 @@ export default class Game {
             ctx.setLineDash([]);
         }
 
-        //Draw cursor
+        //Draw Points AND ADD POINTS
+        ctx.beginPath();
+        this.points += 1
+        ctx.font = "30px Sans-Serif";
+        ctx.fillStyle = 'white';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Points: ${this.points}`, 100, this.canvas.height-50);
+        ctx.closePath();
+        //Draw Time
+        ctx.beginPath();
+        ctx.font = "30px Sans-Serif";
+        ctx.fillStyle = 'white';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Time: ${Math.floor(this.playTime)}s`, 100, this.canvas.height-100);
+        ctx.closePath();
+        // console.log(this.playTime)
 
     }
 
