@@ -21,7 +21,7 @@ export default class Health {
         //     let that = this;
         //     setTimeout(() => that.cooldown = true, 1)
         // }
-        this.value = this.value - 0.5;
+        this.value = this.value - 9;
         // console.log(this.value)
     }
 

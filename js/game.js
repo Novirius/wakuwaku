@@ -3,7 +3,7 @@ import Particle from './particle'
 import * as CONSTANT from './constants';
 import Health from './health';
 import anime from 'animejs/lib/anime.es.js';
-
+import Stats from './stats';
 
 export default class Game {
     constructor(canvas, ctx, gameView) {
@@ -29,7 +29,8 @@ export default class Game {
         this.orbSize = 75;
         this.ringSize = this.orbSize * 3;
         //Objects
-        this.health = new Health(1/20, 5, this, this.gameView)
+        this.health = new Health(1/13, 5, this, this.gameView)
+        this.stats = new Stats(this, this.gameView)
         this.objects = [];
         //Points
         this.points = 0;
@@ -66,7 +67,7 @@ export default class Game {
     increasePlayTime (dt) {
         // console.log(dt)
         this.playTime += dt
-        if (this.playTime > 150) {
+        if (this.playTime > 142) {
             this.gameView.stop();
         }
     }
@@ -89,11 +90,14 @@ export default class Game {
         const randomRange = Math.floor(Math.random()*7) + 1;
 
         let timer = 1;
-        if (this.playTime < 40) {
-            timer = 1.2
+        if (this.playTime < 27) {
+            timer = 1.5
         }
-        else if ((this.playTime > 39) && (this.playTime < 60)) {
-            timer = 0.8
+        else if ((this.playTime > 26) && (this.playTime < 45)) {
+            timer = 1.8
+        }
+        else if ((this.playTime > 44) && (this.playTime < 60)) {
+            timer = 0.9
         }
         else if ((this.playTime > 59) && (this.playTime < 80)) {
             timer = 1
@@ -129,6 +133,7 @@ export default class Game {
 
     expireOrbPointsReduction () {
         this.health.miss();
+        this.stats.updateMiss(1)
     }
 
     bindEventListener() {
@@ -152,28 +157,32 @@ export default class Game {
                                 this.objects[0].active = 'expire';
                                 this.health.perfect();
                                 hitSound.play();
-                                this.points += 1000
+                                this.stats.updatePoints(1000)
+                                this.stats.updatePerfect(1)
                                 //perfect points
                             }
-                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
                                 this.clickable = false;
                                 this.objects[0].active = 'expire';
                                 this.health.good();
                                 hitSound.play();
-                                this.points += 500
+                                this.stats.updatePoints(300)
+                                this.stats.updateGood(1)
                                 //Good points
                             }
-                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.6)) && this.clickable) {
+                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
                                 this.clickable = false;
                                 this.objects[0].active = 'expire';
                                 this.health.poor();
                                 hitSound.play();
-                                this.points += 100
+                                this.stats.updatePoints(100)
+                                this.stats.updatePoor(1)
                                 //Poor points
                             }
                             else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
                                 this.clickable = false;
                                 missSound.play();
+                                this.stats.updateMiss(1)
                                 //No points
                             }
                             else {
@@ -232,21 +241,14 @@ export default class Game {
         }
 
         //Draw Points AND ADD POINTS
-        ctx.beginPath();
-        this.points += 1
-        ctx.font = "30px Sans-Serif";
-        ctx.fillStyle = 'white';
-        ctx.textBaseline = 'middle';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Points: ${this.points}`, 100, this.canvas.height-50);
-        ctx.closePath();
+        this.stats.draw(this.ctx)
         //Draw Time
         ctx.beginPath();
-        ctx.font = "30px Sans-Serif";
+        ctx.font = "120px Teko";
         ctx.fillStyle = 'white';
         ctx.textBaseline = 'middle';
-        ctx.textAlign = 'center';
-        ctx.fillText(`Time: ${Math.floor(this.playTime)}s`, 100, this.canvas.height-100);
+        ctx.textAlign = 'left';
+        ctx.fillText(`${Math.floor(this.playTime)}s`, 25, this.canvas.height-25);
         ctx.closePath();
         // console.log(this.playTime)
 

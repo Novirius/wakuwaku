@@ -22,6 +22,7 @@ export default class Orb {
         this.game = game;
         this.path;
         this.callback = callback;
+        this.expiring = false;
         //Functions
         this.timerSize = this.timerSize.bind(this);
         this.activeOrb = this.activeOrb.bind(this);
@@ -52,7 +53,8 @@ export default class Orb {
     }
 
     checkActive () {
-        if (this.ringRadius < 1) {
+        if ((this.ringRadius < 1) && !this.expiring) {
+            this.expiring = true;
             this.active = 'expire'
             this.game.makeClickable();
             this.game.expireOrbPointsReduction();
