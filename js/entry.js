@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("game-canvas");
     const ctx = canvas.getContext("2d");
     ctx.globalCompositeOperation = 'destination-over'
-    canvas.width = window.innerWidth * 0.99;
-    canvas.height = window.innerHeight * 0.98;
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = window.innerHeight * 0.9;
     document.body.appendChild(canvas);
     const game = new GameView(canvas,ctx);
     // game.start();
