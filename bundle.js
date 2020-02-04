@@ -258,8 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var canvas = document.getElementById("game-canvas");
   var ctx = canvas.getContext("2d");
   ctx.globalCompositeOperation = 'destination-over';
-  canvas.width = window.innerWidth * 0.85;
-  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth * 0.99;
+  canvas.height = window.innerHeight * 0.98;
   document.body.appendChild(canvas);
   var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx); // game.start();
 
@@ -292,11 +292,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ "./js/constants.js");
 /* harmony import */ var _health__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./health */ "./js/health.js");
 /* harmony import */ var animejs_lib_anime_es_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! animejs/lib/anime.es.js */ "./node_modules/animejs/lib/anime.es.js");
+/* harmony import */ var _stats__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./stats */ "./js/stats.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -332,7 +334,8 @@ function () {
     this.orbSize = 75;
     this.ringSize = this.orbSize * 3; //Objects
 
-    this.health = new _health__WEBPACK_IMPORTED_MODULE_3__["default"](1 / 20, 5, this, this.gameView);
+    this.health = new _health__WEBPACK_IMPORTED_MODULE_3__["default"](1 / 13, 5, this, this.gameView);
+    this.stats = new _stats__WEBPACK_IMPORTED_MODULE_5__["default"](this, this.gameView);
     this.objects = []; //Points
 
     this.points = 0; //Music
@@ -376,7 +379,7 @@ function () {
       // console.log(dt)
       this.playTime += dt;
 
-      if (this.playTime > 150) {
+      if (this.playTime > 142) {
         this.gameView.stop();
       }
     }
@@ -401,10 +404,12 @@ function () {
       var randomRange = Math.floor(Math.random() * 7) + 1;
       var timer = 1;
 
-      if (this.playTime < 40) {
-        timer = 1.2;
-      } else if (this.playTime > 39 && this.playTime < 60) {
-        timer = 0.7;
+      if (this.playTime < 27) {
+        timer = 1.5;
+      } else if (this.playTime > 26 && this.playTime < 45) {
+        timer = 1.8;
+      } else if (this.playTime > 44 && this.playTime < 60) {
+        timer = 0.9;
       } else if (this.playTime > 59 && this.playTime < 80) {
         timer = 1;
       } else if (this.playTime > 79 && this.playTime < 110) {
@@ -443,6 +448,7 @@ function () {
     key: "expireOrbPointsReduction",
     value: function expireOrbPointsReduction() {
       this.health.miss();
+      this.stats.updateMiss(1);
     }
   }, {
     key: "bindEventListener",
@@ -472,26 +478,41 @@ function () {
                   _this3.health.perfect();
 
                   hitSound.play();
-                  _this3.points += 1000; //perfect points
-                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.4 && _this3.clickable) {
+
+                  _this3.stats.updatePoints(1000);
+
+                  _this3.stats.updatePerfect(1); //perfect points
+
+                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.2 && _this3.clickable) {
                   _this3.clickable = false;
                   _this3.objects[0].active = 'expire';
 
                   _this3.health.good();
 
                   hitSound.play();
-                  _this3.points += 500; //Good points
-                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.6 && _this3.clickable) {
+
+                  _this3.stats.updatePoints(300);
+
+                  _this3.stats.updateGood(1); //Good points
+
+                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.4 && _this3.clickable) {
                   _this3.clickable = false;
                   _this3.objects[0].active = 'expire';
 
                   _this3.health.poor();
 
                   hitSound.play();
-                  _this3.points += 100; //Poor points
+
+                  _this3.stats.updatePoints(100);
+
+                  _this3.stats.updatePoor(1); //Poor points
+
                 } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 1.6 && _this3.clickable) {
                   _this3.clickable = false;
-                  missSound.play(); //No points
+                  missSound.play();
+
+                  _this3.stats.updateMiss(1); //No points
+
                 } else {}
               }
             } // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
@@ -545,21 +566,14 @@ function () {
       } //Draw Points AND ADD POINTS
 
 
-      ctx.beginPath();
-      this.points += 1;
-      ctx.font = "30px Sans-Serif";
-      ctx.fillStyle = 'white';
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
-      ctx.fillText("Points: ".concat(this.points), 100, this.canvas.height - 50);
-      ctx.closePath(); //Draw Time
+      this.stats.draw(this.ctx); //Draw Time
 
       ctx.beginPath();
-      ctx.font = "30px Sans-Serif";
+      ctx.font = "120px Teko";
       ctx.fillStyle = 'white';
       ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
-      ctx.fillText("Time: ".concat(Math.floor(this.playTime), "s"), 100, this.canvas.height - 100);
+      ctx.textAlign = 'left';
+      ctx.fillText("".concat(Math.floor(this.playTime), "s"), 25, this.canvas.height - 25);
       ctx.closePath(); // console.log(this.playTime)
     }
   }]);
@@ -709,7 +723,7 @@ function () {
       //     let that = this;
       //     setTimeout(() => that.cooldown = true, 1)
       // }
-      this.value = this.value - 0.5; // console.log(this.value)
+      this.value = this.value - 9; // console.log(this.value)
     }
   }, {
     key: "perfect",
@@ -733,8 +747,10 @@ function () {
 
       if (this.value <= 0) {
         this.gameView.stop(); // alert('gameover')
-      } else if (this.value > 100) {
-        this.value === 100;
+      }
+
+      if (this.value > 100) {
+        this.value = 100;
       } // console.log(this.value)
 
     }
@@ -742,12 +758,15 @@ function () {
     key: "outlineHP",
     value: function outlineHP(ctx) {
       ctx.beginPath();
+
+      if (this.value > 100) {
+        this.value = 100;
+      }
+
       var calcCurrentHP = this.gameInstance.canvas.width * 0.5 * (this.value / 100);
       var currentHP;
 
-      if (calcCurrentHP > this.gameInstance.canvas.width * 0.5) {
-        currentHP = this.gameInstance.canvas.width * 0.5;
-      } else if (calcCurrentHP < 0) {
+      if (calcCurrentHP <= 0) {
         currentHP = 0;
       } else {
         currentHP = calcCurrentHP;
@@ -824,7 +843,8 @@ function () {
     this.time = 0;
     this.game = game;
     this.path;
-    this.callback = callback; //Functions
+    this.callback = callback;
+    this.expiring = false; //Functions
 
     this.timerSize = this.timerSize.bind(this);
     this.activeOrb = this.activeOrb.bind(this);
@@ -861,7 +881,8 @@ function () {
   }, {
     key: "checkActive",
     value: function checkActive() {
-      if (this.ringRadius < 1) {
+      if (this.ringRadius < 1 && !this.expiring) {
+        this.expiring = true;
         this.active = 'expire';
         this.game.makeClickable();
         this.game.expireOrbPointsReduction();
@@ -1023,6 +1044,130 @@ function () {
   }]);
 
   return Particle;
+}();
+
+
+
+/***/ }),
+
+/***/ "./js/stats.js":
+/*!*********************!*\
+  !*** ./js/stats.js ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Stats; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Stats =
+/*#__PURE__*/
+function () {
+  function Stats(gameInstance, gameView) {
+    _classCallCheck(this, Stats);
+
+    this.gameInstance = gameInstance;
+    this.gameView = gameView;
+    this.numPerfect = 0;
+    this.numGood = 0;
+    this.numPoor = 0;
+    this.numMiss = 0;
+    this.points = 0; //Functions
+
+    this.updateHitPercentage = this.updateHitPercentage.bind(this);
+    this.updatePoints = this.updatePoints.bind(this);
+    this.updatePerfect = this.updatePerfect.bind(this);
+    this.updateGood = this.updateGood.bind(this);
+    this.updatePoor = this.updatePoor.bind(this);
+    this.updateMiss = this.updateMiss.bind(this);
+    this.outlinePoints = this.outlinePoints.bind(this);
+    this.outlineStats = this.outlineStats.bind(this);
+    this.outlineHitPercentage = this.outlineHitPercentage.bind(this);
+    this.draw = this.draw.bind(this);
+  }
+
+  _createClass(Stats, [{
+    key: "updateHitPercentage",
+    value: function updateHitPercentage() {
+      var hitPercentage = 100 * ((this.numPerfect + this.numGood + this.numPoor) / (this.numPerfect + this.numGood + this.numPoor + this.numMiss));
+      var rounded = Math.floor(hitPercentage * 1000) / 1000;
+      return rounded;
+    }
+  }, {
+    key: "updatePoints",
+    value: function updatePoints(points) {
+      this.points += points;
+    }
+  }, {
+    key: "updatePerfect",
+    value: function updatePerfect(number) {
+      this.numPerfect += number;
+      debugger;
+    }
+  }, {
+    key: "updateGood",
+    value: function updateGood(number) {
+      this.numGoods += number;
+    }
+  }, {
+    key: "updatePoor",
+    value: function updatePoor(number) {
+      this.numPoors += number;
+    }
+  }, {
+    key: "updateMiss",
+    value: function updateMiss(number) {
+      this.numMiss += number;
+    }
+  }, {
+    key: "outlinePoints",
+    value: function outlinePoints(ctx) {
+      ctx.beginPath();
+      ctx.font = "120px Teko";
+      ctx.fillStyle = 'white';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'right';
+      ctx.fillText("000".concat(this.points), this.gameInstance.canvas.width, 75);
+      ctx.closePath();
+    }
+  }, {
+    key: "outlineStats",
+    value: function outlineStats(ctx) {
+      ctx.beginPath();
+      ctx.font = "90px Open Sans";
+      ctx.fillStyle = 'white';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'center';
+      ctx.fillText("".concat(this.numPerfects, " Perfects"), this.gameInstance.canvas.width - 200, 0);
+      ctx.closePath();
+    }
+  }, {
+    key: "outlineHitPercentage",
+    value: function outlineHitPercentage(ctx) {
+      ctx.beginPath();
+      ctx.font = "50px Teko";
+      ctx.fillStyle = 'white';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'right';
+      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135);
+      ctx.closePath();
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      this.updatePoints(1);
+      this.outlinePoints(ctx);
+      this.outlineHitPercentage(ctx);
+    }
+  }]);
+
+  return Stats;
 }();
 
 
