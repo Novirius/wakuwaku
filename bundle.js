@@ -404,7 +404,7 @@ function () {
       if (this.playTime < 40) {
         timer = 1.2;
       } else if (this.playTime > 39 && this.playTime < 60) {
-        timer = 0.7;
+        timer = 0.8;
       } else if (this.playTime > 59 && this.playTime < 80) {
         timer = 1;
       } else if (this.playTime > 79 && this.playTime < 110) {
@@ -733,8 +733,10 @@ function () {
 
       if (this.value <= 0) {
         this.gameView.stop(); // alert('gameover')
-      } else if (this.value > 100) {
-        this.value === 100;
+      }
+
+      if (this.value > 100) {
+        this.value = 100;
       } // console.log(this.value)
 
     }
@@ -742,12 +744,15 @@ function () {
     key: "outlineHP",
     value: function outlineHP(ctx) {
       ctx.beginPath();
+
+      if (this.value > 100) {
+        this.value = 100;
+      }
+
       var calcCurrentHP = this.gameInstance.canvas.width * 0.5 * (this.value / 100);
       var currentHP;
 
-      if (calcCurrentHP > this.gameInstance.canvas.width * 0.5) {
-        currentHP = this.gameInstance.canvas.width * 0.5;
-      } else if (calcCurrentHP < 0) {
+      if (calcCurrentHP <= 0) {
         currentHP = 0;
       } else {
         currentHP = calcCurrentHP;

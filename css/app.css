@@ -38,29 +38,6 @@ body {
 }
 
 
-body {
-    /* overflow: hidden;
-  }
-  div {
-    position: absolute;
-    border-radius:50%;
-    left: 0;
-    top: 0;
-  }
-
-  body {
-    overflow: hidden;
-    height: 100vh;
-    touch-action: none;
-  }
-  div {
-    position: absolute;
-    border-radius:50%;
-    left: 0;
-    top: 0; */
-  }
-
-
 #container {
   position: relative;
 
