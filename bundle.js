@@ -261,15 +261,20 @@ document.addEventListener("DOMContentLoaded", function () {
   canvas.width = window.innerWidth * 0.9;
   canvas.height = window.innerHeight * 0.9;
   document.body.appendChild(canvas);
-  var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx); // game.start();
-
+  var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx);
   var welcomeSplash = document.getElementById('welcome-splash');
   var playButton = document.getElementById('play-button');
+  var countdown = new Audio();
+  countdown.src = "assets/music/smash_countdown.mp3";
   playButton.addEventListener('click', function () {
     welcomeSplash.classList.add("hide");
+    countdown.play();
     setTimeout(function () {
       return game.start();
-    }, 3000);
+    }, 5000);
+    setTimeout(function () {
+      return countdown.pause();
+    }, 4500);
   });
 }); // addEventListener('mousedown', e => console.log(e))
 // addEventListener('mousemove', e => console.log(e))
@@ -630,13 +635,17 @@ function () {
   _createClass(GameView, [{
     key: "start",
     value: function start() {
+      var _this = this;
+
       if (!this.requestId) {
-        this.gameInstance.bindEventListener();
-        this.gameInstance.generateManyOrbs(); // this.gameInstance.beginTimer();
+        this.gameInstance.bindEventListener(); // this.gameInstance.beginTimer();
         // this.gameInstance.resetScene();
 
         this.gameInstance.playMusic();
         this.requestId = requestAnimationFrame(this.animate.bind(this));
+        setTimeout(function () {
+          return _this.gameInstance.generateManyOrbs();
+        }, 500);
       }
     }
   }, {
@@ -723,7 +732,7 @@ function () {
       //     let that = this;
       //     setTimeout(() => that.cooldown = true, 1)
       // }
-      this.value = this.value - 9; // console.log(this.value)
+      this.value = this.value - 5; // console.log(this.value)
     }
   }, {
     key: "perfect",

@@ -12,12 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.height = window.innerHeight * 0.9;
     document.body.appendChild(canvas);
     const game = new GameView(canvas,ctx);
-    // game.start();
     const welcomeSplash = document.getElementById('welcome-splash')
     const playButton = document.getElementById('play-button')
+    const countdown = new Audio();
+    countdown.src = "assets/music/smash_countdown.mp3";
     playButton.addEventListener('click', () => {
         welcomeSplash.classList.add("hide");
-        setTimeout(() => game.start(), 3000)
+        countdown.play();
+        setTimeout(() => game.start(), 5000)
+        setTimeout(() => countdown.pause(), 4500)
     })
     
 })
