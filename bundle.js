@@ -258,8 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var canvas = document.getElementById("game-canvas");
   var ctx = canvas.getContext("2d");
   ctx.globalCompositeOperation = 'destination-over';
-  canvas.width = window.innerWidth * 0.99;
-  canvas.height = window.innerHeight * 0.98;
+  canvas.width = window.innerWidth * 0.9;
+  canvas.height = window.innerHeight * 0.9;
   document.body.appendChild(canvas);
   var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx); // game.start();
 
