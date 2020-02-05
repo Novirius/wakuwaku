@@ -22,12 +22,12 @@ export default class GameView {
   start () {
     if (!this.requestId) {
       this.gameInstance.bindEventListener();
-      this.gameInstance.generateManyOrbs ();
       // this.gameInstance.beginTimer();
       // this.gameInstance.resetScene();
       this.gameInstance.playMusic();
-        this.requestId = requestAnimationFrame(this.animate.bind(this));
-      }
+      this.requestId = requestAnimationFrame(this.animate.bind(this));
+      this.gameInstance.generateManyOrbs ();
+    }
   }
 
   stop () {
