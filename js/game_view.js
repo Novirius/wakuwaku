@@ -26,7 +26,8 @@ export default class GameView {
       // this.gameInstance.resetScene();
       this.gameInstance.playMusic();
       this.requestId = requestAnimationFrame(this.animate.bind(this));
-      this.gameInstance.generateManyOrbs ();
+      setTimeout(()=>this.gameInstance.generateManyOrbs(), 500)
+      
     }
   }
 
