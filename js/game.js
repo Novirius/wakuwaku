@@ -91,10 +91,10 @@ export default class Game {
 
         let timer = 1;
         if (this.playTime < 27) {
-            timer = 1
+            timer = 1.1
         }
         else if ((this.playTime > 26) && (this.playTime < 40)) {
-            timer = 1.2
+            timer = 1.3
         }
         else if ((this.playTime > 39) && (this.playTime < 60)) {
             timer = 0.9
