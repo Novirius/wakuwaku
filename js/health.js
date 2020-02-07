@@ -80,7 +80,6 @@ export default class Health {
 
         ctx.fillStyle = grd;
         ctx.fill();
-        console.log(this.value);
         // console.log('hi')
     }
 }

@@ -410,10 +410,10 @@ function () {
       var timer = 1;
 
       if (this.playTime < 27) {
-        timer = 1.5;
-      } else if (this.playTime > 26 && this.playTime < 45) {
-        timer = 1.8;
-      } else if (this.playTime > 44 && this.playTime < 60) {
+        timer = 1.1;
+      } else if (this.playTime > 26 && this.playTime < 40) {
+        timer = 1.3;
+      } else if (this.playTime > 39 && this.playTime < 60) {
         timer = 0.9;
       } else if (this.playTime > 59 && this.playTime < 80) {
         timer = 1;
@@ -642,6 +642,7 @@ function () {
         // this.gameInstance.resetScene();
 
         this.gameInstance.playMusic();
+        this.lastTime = new Date();
         this.requestId = requestAnimationFrame(this.animate.bind(this));
         setTimeout(function () {
           return _this.gameInstance.generateManyOrbs();
@@ -667,14 +668,17 @@ function () {
   }, {
     key: "animate",
     value: function animate() {
-      var currentTime = Date.now();
-      var dt = (currentTime - this.lastTime) / 1000;
-      this.lastTime = currentTime;
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.gameInstance.increasePlayTime(dt);
-      this.gameInstance.draw(this.ctx, dt); // this.game.mouseStep(delta);
-
       if (!this.gameOver) {
+        var currentTime = Date.now();
+        console.log("current time: ".concat(currentTime));
+        console.log("last time: ".concat(this.lastTime));
+        var dt = (currentTime - this.lastTime) / 1000;
+        console.log("difference time: ".concat(dt));
+        this.lastTime = currentTime;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.gameInstance.increasePlayTime(dt);
+        this.gameInstance.draw(this.ctx, dt); // this.game.mouseStep(delta);
+
         requestAnimationFrame(this.animate.bind(this));
       }
     }
@@ -795,8 +799,7 @@ function () {
       grd.addColorStop(0.495, 'rgba(191, 241, 255, 1.000)');
       grd.addColorStop(1.000, 'rgba(247, 252, 184, 1.000)');
       ctx.fillStyle = grd;
-      ctx.fill();
-      console.log(this.value); // console.log('hi')
+      ctx.fill(); // console.log('hi')
     }
   }]);
 
