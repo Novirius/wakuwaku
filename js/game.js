@@ -193,9 +193,6 @@ export default class Game {
                     break;
                 case 82:
                     this.generateOrb();
-                    console.log('testtop')
-                    // console.log(`${this.playTime}`)
-                    console.log('testbottom')
                 default:
                     break;
             }

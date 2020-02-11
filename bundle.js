@@ -528,10 +528,6 @@ function () {
           case 82:
             _this3.generateOrb();
 
-            console.log('testtop'); // console.log(`${this.playTime}`)
-
-            console.log('testbottom');
-
           default:
             break;
         }
@@ -716,6 +712,7 @@ function () {
 
         this.gameInstance.stopMusic();
         cancelAnimationFrame(this.requestID);
+        window.removeEventListener('keydown');
         setTimeout(function () {
           return alert('refresh because it is a work in progress!');
         }, 3000);
@@ -726,11 +723,11 @@ function () {
     key: "animate",
     value: function animate() {
       if (!this.gameOver) {
-        var currentTime = Date.now();
-        console.log("current time: ".concat(currentTime));
-        console.log("last time: ".concat(this.lastTime));
-        var dt = (currentTime - this.lastTime) / 1000;
-        console.log("difference time: ".concat(dt));
+        var currentTime = Date.now(); // console.log(`current time: ${currentTime}`)
+        // console.log(`last time: ${this.lastTime}`)
+
+        var dt = (currentTime - this.lastTime) / 1000; // console.log(`difference time: ${dt}`)
+
         this.lastTime = currentTime;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.gameInstance.increasePlayTime(dt);

@@ -40,6 +40,7 @@ export default class GameView {
     // this.gameInstance.resetScene();
     this.gameInstance.stopMusic();
     cancelAnimationFrame(this.requestID);
+    window.removeEventListener('keydown')
     setTimeout(() => alert('refresh because it is a work in progress!'), 3000)
     return;
     }
@@ -48,10 +49,10 @@ export default class GameView {
   animate () {  
     if (!this.gameOver) {
     let currentTime = Date.now();
-    console.log(`current time: ${currentTime}`)
-    console.log(`last time: ${this.lastTime}`)
+    // console.log(`current time: ${currentTime}`)
+    // console.log(`last time: ${this.lastTime}`)
     let dt = (currentTime - this.lastTime)/1000;
-    console.log(`difference time: ${dt}`)
+    // console.log(`difference time: ${dt}`)
     this.lastTime = currentTime;
     this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
     this.gameInstance.increasePlayTime(dt)
