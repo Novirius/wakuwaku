@@ -67,7 +67,7 @@ export default class Game {
     increasePlayTime (dt) {
         // console.log(dt)
         this.playTime += dt
-        if (this.playTime > 142) {
+        if (this.playTime > 135) {
             this.gameView.stop();
         }
     }
@@ -106,7 +106,7 @@ export default class Game {
             timer = 0.8
         }
         else {
-            timer = 1
+            timer = 0.7
         }
         let callback;
         for (let i = 1; i < (randomRange+1); i++) {
@@ -198,6 +198,54 @@ export default class Game {
                     console.log('testbottom')
                 default:
                     break;
+            }
+        })
+        //touchscreens
+        window.addEventListener("touchstart", (event) => {
+            let hitSound = new Audio();
+            hitSound.src = "assets/music/taiko.wav";
+            hitSound.loop = false;
+            let missSound = new Audio();
+            missSound.src = "assets/music/whoosh.mp3";
+            missSound.loop = false;
+            if (this.objects[0] instanceof Orb) {
+                if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+                    if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                        this.clickable = false;
+                        this.objects[0].active = 'expire';
+                        this.health.perfect();
+                        hitSound.play();
+                        this.stats.updatePoints(1000)
+                        this.stats.updatePerfect(1)
+                        //perfect points
+                    }
+                    else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+                        this.clickable = false;
+                        this.objects[0].active = 'expire';
+                        this.health.good();
+                        hitSound.play();
+                        this.stats.updatePoints(300)
+                        this.stats.updateGood(1)
+                        //Good points
+                    }
+                    else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                        this.clickable = false;
+                        this.objects[0].active = 'expire';
+                        this.health.poor();
+                        hitSound.play();
+                        this.stats.updatePoints(100)
+                        this.stats.updatePoor(1)
+                        //Poor points
+                    }
+                    else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+                        this.clickable = false;
+                        missSound.play();
+                        this.stats.updateMiss(1)
+                        //No points
+                    }
+                    else {
+                    }
+                }
             }
         })
         

@@ -84,6 +84,7 @@ export default class Orb {
         // this.frame += 1;
         // this.time += dt;
         //Timer Animation
+        
         ctx.beginPath();
         ctx.arc(this.centerX, this.centerY, this.timerSize(dt), 0, 2 * Math.PI);
         ctx.lineWidth = 5;

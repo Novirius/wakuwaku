@@ -384,7 +384,7 @@ function () {
       // console.log(dt)
       this.playTime += dt;
 
-      if (this.playTime > 142) {
+      if (this.playTime > 135) {
         this.gameView.stop();
       }
     }
@@ -420,7 +420,7 @@ function () {
       } else if (this.playTime > 79 && this.playTime < 110) {
         timer = 0.8;
       } else {
-        timer = 1;
+        timer = 0.7;
       }
 
       var callback;
@@ -534,6 +534,63 @@ function () {
 
           default:
             break;
+        }
+      }); //touchscreens
+
+      window.addEventListener("touchstart", function (event) {
+        var hitSound = new Audio();
+        hitSound.src = "assets/music/taiko.wav";
+        hitSound.loop = false;
+        var missSound = new Audio();
+        missSound.src = "assets/music/whoosh.mp3";
+        missSound.loop = false;
+
+        if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+          if (Math.sqrt((_this3.mousePosX - _this3.objects[0].centerX) * (_this3.mousePosX - _this3.objects[0].centerX) + (_this3.mousePosY - _this3.objects[0].centerY) * (_this3.mousePosY - _this3.objects[0].centerY)) < _this3.objects[0].circleRadius) {
+            if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.1 && _this3.clickable) {
+              _this3.clickable = false;
+              _this3.objects[0].active = 'expire';
+
+              _this3.health.perfect();
+
+              hitSound.play();
+
+              _this3.stats.updatePoints(1000);
+
+              _this3.stats.updatePerfect(1); //perfect points
+
+            } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.2 && _this3.clickable) {
+              _this3.clickable = false;
+              _this3.objects[0].active = 'expire';
+
+              _this3.health.good();
+
+              hitSound.play();
+
+              _this3.stats.updatePoints(300);
+
+              _this3.stats.updateGood(1); //Good points
+
+            } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.4 && _this3.clickable) {
+              _this3.clickable = false;
+              _this3.objects[0].active = 'expire';
+
+              _this3.health.poor();
+
+              hitSound.play();
+
+              _this3.stats.updatePoints(100);
+
+              _this3.stats.updatePoor(1); //Poor points
+
+            } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 1.6 && _this3.clickable) {
+              _this3.clickable = false;
+              missSound.play();
+
+              _this3.stats.updateMiss(1); //No points
+
+            } else {}
+          }
         }
       });
     }
