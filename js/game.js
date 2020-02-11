@@ -34,9 +34,21 @@ export default class Game {
         this.objects = [];
         //Points
         this.points = 0;
-        //Music
+        //bgm
         this.bgm = new Audio();
+        this.bgm.src = "assets/music/bgm2.mp3";
+        this.bgm.loop = false;
+        //gameover sound
         this.gameOverSFX = new Audio ();
+        this.gameOverSFX.src = "assets/music/gameoversfx.wav";
+        this.gameOverSFX.loop = false;
+        //Hit and miss sound
+        this.hitSound = new Audio();
+        this.hitSound.src = "assets/music/taiko.wav";
+        this.hitSound.loop = false;
+        this.missSound = new Audio();
+        this.missSound.src = "assets/music/whoosh.mp3";
+        this.missSound.loop = false;
         //Function
         this.bindEventListener = this.bindEventListener.bind(this);
         this.draw = this.draw.bind(this);
@@ -47,21 +59,16 @@ export default class Game {
         this.expireOrbPointsReduction = this.expireOrbPointsReduction.bind(this);
         this.playMusic = this.playMusic.bind(this);
         this.stopMusic = this.stopMusic.bind(this);
+        this.handleGameInput = this.handleGameInput.bind(this);
     }
 
     playMusic() {
-        this.bgm.src = "assets/music/bgm2.mp3";
-        this.bgm.loop = false;
         this.bgm.play();
-
-        this.gameOverSFX.src = "assets/music/gameoversfx.wav";
-        this.gameOverSFX.loop = false;
     }
 
     stopMusic() {
         this.bgm.pause();
-        setTimeout(()=>this.gameOverSFX.play(), 1000)
-        
+        setTimeout(()=>this.gameOverSFX.play(), 1000) 
     }
 
     increasePlayTime (dt) {
@@ -135,82 +142,123 @@ export default class Game {
         this.stats.updateMiss(1)
     }
 
+    handleGameInput(event) {
+        switch(event.keyCode) {
+            //If key is z or x
+            case 90:
+            case 88:
+                if (this.objects[0] instanceof Orb) {
+                    if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+                        if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                            this.clickable = false;
+                            this.objects[0].active = 'expire';
+                            this.health.perfect();
+                            this.hitSound.play();
+                            this.stats.updatePoints(1000)
+                            this.stats.updatePerfect(1)
+                            //perfect points
+                        }
+                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+                            this.clickable = false;
+                            this.objects[0].active = 'expire';
+                            this.health.good();
+                            this.hitSound.play();
+                            this.stats.updatePoints(300)
+                            this.stats.updateGood(1)
+                            //Good points
+                        }
+                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                            this.clickable = false;
+                            this.objects[0].active = 'expire';
+                            this.health.poor();
+                            this.hitSound.play();
+                            this.stats.updatePoints(100)
+                            this.stats.updatePoor(1)
+                            //Poor points
+                        }
+                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+                            this.clickable = false;
+                            this.missSound.play();
+                            this.stats.updateMiss(1)
+                            //No points
+                        }
+                        else {
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     bindEventListener() {
         this.canvas.addEventListener('mousemove', (event) => {
             this.mousePosX = event.clientX;
             this.mousePosY = event.clientY;
         })
-        window.addEventListener("keydown", (event) => {
-            let hitSound = new Audio();
-            hitSound.src = "assets/music/taiko.wav";
-            hitSound.loop = false;
-            let missSound = new Audio();
-            missSound.src = "assets/music/whoosh.mp3";
-            missSound.loop = false;
-            switch(event.keyCode) {
-                case 88:
-                    if (this.objects[0] instanceof Orb) {
-                        if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-                            if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
-                                this.clickable = false;
-                                this.objects[0].active = 'expire';
-                                this.health.perfect();
-                                hitSound.play();
-                                this.stats.updatePoints(1000)
-                                this.stats.updatePerfect(1)
-                                //perfect points
-                            }
-                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
-                                this.clickable = false;
-                                this.objects[0].active = 'expire';
-                                this.health.good();
-                                hitSound.play();
-                                this.stats.updatePoints(300)
-                                this.stats.updateGood(1)
-                                //Good points
-                            }
-                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
-                                this.clickable = false;
-                                this.objects[0].active = 'expire';
-                                this.health.poor();
-                                hitSound.play();
-                                this.stats.updatePoints(100)
-                                this.stats.updatePoor(1)
-                                //Poor points
-                            }
-                            else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
-                                this.clickable = false;
-                                missSound.play();
-                                this.stats.updateMiss(1)
-                                //No points
-                            }
-                            else {
-                            }
-                        }
-                    }
-                    // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
-                    break;
-                case 82:
-                    this.generateOrb();
-                default:
-                    break;
-            }
-        })
+        window.addEventListener("keydown", this.handleGameInput
+        // (event) => {
+        //     switch(event.keyCode) {
+        //         case 88:
+        //             if (this.objects[0] instanceof Orb) {
+        //                 if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+        //                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+        //                         this.clickable = false;
+        //                         this.objects[0].active = 'expire';
+        //                         this.health.perfect();
+        //                         this.hitSound.play();
+        //                         this.stats.updatePoints(1000)
+        //                         this.stats.updatePerfect(1)
+        //                         //perfect points
+        //                     }
+        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+        //                         this.clickable = false;
+        //                         this.objects[0].active = 'expire';
+        //                         this.health.good();
+        //                         this.hitSound.play();
+        //                         this.stats.updatePoints(300)
+        //                         this.stats.updateGood(1)
+        //                         //Good points
+        //                     }
+        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+        //                         this.clickable = false;
+        //                         this.objects[0].active = 'expire';
+        //                         this.health.poor();
+        //                         this.hitSound.play();
+        //                         this.stats.updatePoints(100)
+        //                         this.stats.updatePoor(1)
+        //                         //Poor points
+        //                     }
+        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+        //                         this.clickable = false;
+        //                         this.missSound.play();
+        //                         this.stats.updateMiss(1)
+        //                         //No points
+        //                     }
+        //                     else {
+        //                     }
+        //                 }
+        //             }
+        //             // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
+        //             break;
+        //         case 82:
+        //             this.generateOrb();
+        //         default:
+        //             break;
+        //     }
+        // }
+        
+        )
         //touchscreens
         window.addEventListener("touchstart", (event) => {
-            let hitSound = new Audio();
-            hitSound.src = "assets/music/taiko.wav";
-            hitSound.loop = false;
-            let missSound = new Audio();
-            missSound.src = "assets/music/whoosh.mp3";
-            missSound.loop = false;
             if (this.objects[0] instanceof Orb) {
-                if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+                if (Math.sqrt((event.touches[0].clientX-this.objects[0].centerX)*(event.touches[0].clientX-this.objects[0].centerX) + (event.touches[0].clientY-this.objects[0].centerY)*(event.touches[0].clientY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
                         this.clickable = false;
                         this.objects[0].active = 'expire';
                         this.health.perfect();
-                        hitSound.play();
+                        this.hitSound.play();
                         this.stats.updatePoints(1000)
                         this.stats.updatePerfect(1)
                         //perfect points
@@ -219,7 +267,7 @@ export default class Game {
                         this.clickable = false;
                         this.objects[0].active = 'expire';
                         this.health.good();
-                        hitSound.play();
+                        this.hitSound.play();
                         this.stats.updatePoints(300)
                         this.stats.updateGood(1)
                         //Good points
@@ -228,14 +276,14 @@ export default class Game {
                         this.clickable = false;
                         this.objects[0].active = 'expire';
                         this.health.poor();
-                        hitSound.play();
+                        this.hitSound.play();
                         this.stats.updatePoints(100)
                         this.stats.updatePoor(1)
                         //Poor points
                     }
                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
                         this.clickable = false;
-                        missSound.play();
+                        this.missSound.play();
                         this.stats.updateMiss(1)
                         //No points
                     }

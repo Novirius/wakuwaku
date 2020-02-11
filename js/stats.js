@@ -72,7 +72,8 @@ export default class Stats {
         ctx.fillStyle = 'white';
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'right';
-        ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
+        // ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
+        ctx.fillText(`${this.numMiss}`, this.gameInstance.canvas.width, 135);
         ctx.closePath();
     }
 

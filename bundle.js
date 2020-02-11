@@ -343,10 +343,22 @@ function () {
     this.stats = new _stats__WEBPACK_IMPORTED_MODULE_5__["default"](this, this.gameView);
     this.objects = []; //Points
 
-    this.points = 0; //Music
+    this.points = 0; //bgm
 
     this.bgm = new Audio();
-    this.gameOverSFX = new Audio(); //Function
+    this.bgm.src = "assets/music/bgm2.mp3";
+    this.bgm.loop = false; //gameover sound
+
+    this.gameOverSFX = new Audio();
+    this.gameOverSFX.src = "assets/music/gameoversfx.wav";
+    this.gameOverSFX.loop = false; //Hit and miss sound
+
+    this.hitSound = new Audio();
+    this.hitSound.src = "assets/music/taiko.wav";
+    this.hitSound.loop = false;
+    this.missSound = new Audio();
+    this.missSound.src = "assets/music/whoosh.mp3";
+    this.missSound.loop = false; //Function
 
     this.bindEventListener = this.bindEventListener.bind(this);
     this.draw = this.draw.bind(this);
@@ -357,16 +369,13 @@ function () {
     this.expireOrbPointsReduction = this.expireOrbPointsReduction.bind(this);
     this.playMusic = this.playMusic.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
+    this.handleGameInput = this.handleGameInput.bind(this);
   }
 
   _createClass(Game, [{
     key: "playMusic",
     value: function playMusic() {
-      this.bgm.src = "assets/music/bgm2.mp3";
-      this.bgm.loop = false;
       this.bgm.play();
-      this.gameOverSFX.src = "assets/music/gameoversfx.wav";
-      this.gameOverSFX.loop = false;
     }
   }, {
     key: "stopMusic",
@@ -455,6 +464,50 @@ function () {
       this.stats.updateMiss(1);
     }
   }, {
+    key: "handleGameInput",
+    value: function handleGameInput(event) {
+      switch (event.keyCode) {
+        //If key is z or x
+        case 90:
+        case 88:
+          if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+            if (Math.sqrt((this.mousePosX - this.objects[0].centerX) * (this.mousePosX - this.objects[0].centerX) + (this.mousePosY - this.objects[0].centerY) * (this.mousePosY - this.objects[0].centerY)) < this.objects[0].circleRadius) {
+              if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.1 && this.clickable) {
+                this.clickable = false;
+                this.objects[0].active = 'expire';
+                this.health.perfect();
+                this.hitSound.play();
+                this.stats.updatePoints(1000);
+                this.stats.updatePerfect(1); //perfect points
+              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
+                this.clickable = false;
+                this.objects[0].active = 'expire';
+                this.health.good();
+                this.hitSound.play();
+                this.stats.updatePoints(300);
+                this.stats.updateGood(1); //Good points
+              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.4 && this.clickable) {
+                this.clickable = false;
+                this.objects[0].active = 'expire';
+                this.health.poor();
+                this.hitSound.play();
+                this.stats.updatePoints(100);
+                this.stats.updatePoor(1); //Poor points
+              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 1.6 && this.clickable) {
+                this.clickable = false;
+                this.missSound.play();
+                this.stats.updateMiss(1); //No points
+              } else {}
+            }
+          }
+
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, {
     key: "bindEventListener",
     value: function bindEventListener() {
       var _this3 = this;
@@ -463,92 +516,68 @@ function () {
         _this3.mousePosX = event.clientX;
         _this3.mousePosY = event.clientY;
       });
-      window.addEventListener("keydown", function (event) {
-        var hitSound = new Audio();
-        hitSound.src = "assets/music/taiko.wav";
-        hitSound.loop = false;
-        var missSound = new Audio();
-        missSound.src = "assets/music/whoosh.mp3";
-        missSound.loop = false;
-
-        switch (event.keyCode) {
-          case 88:
-            if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
-              if (Math.sqrt((_this3.mousePosX - _this3.objects[0].centerX) * (_this3.mousePosX - _this3.objects[0].centerX) + (_this3.mousePosY - _this3.objects[0].centerY) * (_this3.mousePosY - _this3.objects[0].centerY)) < _this3.objects[0].circleRadius) {
-                if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.1 && _this3.clickable) {
-                  _this3.clickable = false;
-                  _this3.objects[0].active = 'expire';
-
-                  _this3.health.perfect();
-
-                  hitSound.play();
-
-                  _this3.stats.updatePoints(1000);
-
-                  _this3.stats.updatePerfect(1); //perfect points
-
-                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.2 && _this3.clickable) {
-                  _this3.clickable = false;
-                  _this3.objects[0].active = 'expire';
-
-                  _this3.health.good();
-
-                  hitSound.play();
-
-                  _this3.stats.updatePoints(300);
-
-                  _this3.stats.updateGood(1); //Good points
-
-                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.4 && _this3.clickable) {
-                  _this3.clickable = false;
-                  _this3.objects[0].active = 'expire';
-
-                  _this3.health.poor();
-
-                  hitSound.play();
-
-                  _this3.stats.updatePoints(100);
-
-                  _this3.stats.updatePoor(1); //Poor points
-
-                } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 1.6 && _this3.clickable) {
-                  _this3.clickable = false;
-                  missSound.play();
-
-                  _this3.stats.updateMiss(1); //No points
-
-                } else {}
-              }
-            } // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
-
-
-            break;
-
-          case 82:
-            _this3.generateOrb();
-
-          default:
-            break;
-        }
-      }); //touchscreens
+      window.addEventListener("keydown", this.handleGameInput // (event) => {
+      //     switch(event.keyCode) {
+      //         case 88:
+      //             if (this.objects[0] instanceof Orb) {
+      //                 if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+      //                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+      //                         this.clickable = false;
+      //                         this.objects[0].active = 'expire';
+      //                         this.health.perfect();
+      //                         this.hitSound.play();
+      //                         this.stats.updatePoints(1000)
+      //                         this.stats.updatePerfect(1)
+      //                         //perfect points
+      //                     }
+      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+      //                         this.clickable = false;
+      //                         this.objects[0].active = 'expire';
+      //                         this.health.good();
+      //                         this.hitSound.play();
+      //                         this.stats.updatePoints(300)
+      //                         this.stats.updateGood(1)
+      //                         //Good points
+      //                     }
+      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+      //                         this.clickable = false;
+      //                         this.objects[0].active = 'expire';
+      //                         this.health.poor();
+      //                         this.hitSound.play();
+      //                         this.stats.updatePoints(100)
+      //                         this.stats.updatePoor(1)
+      //                         //Poor points
+      //                     }
+      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+      //                         this.clickable = false;
+      //                         this.missSound.play();
+      //                         this.stats.updateMiss(1)
+      //                         //No points
+      //                     }
+      //                     else {
+      //                     }
+      //                 }
+      //             }
+      //             // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
+      //             break;
+      //         case 82:
+      //             this.generateOrb();
+      //         default:
+      //             break;
+      //     }
+      // }
+      ); //touchscreens
 
       window.addEventListener("touchstart", function (event) {
-        var hitSound = new Audio();
-        hitSound.src = "assets/music/taiko.wav";
-        hitSound.loop = false;
-        var missSound = new Audio();
-        missSound.src = "assets/music/whoosh.mp3";
-        missSound.loop = false;
-
         if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
-          if (Math.sqrt((_this3.mousePosX - _this3.objects[0].centerX) * (_this3.mousePosX - _this3.objects[0].centerX) + (_this3.mousePosY - _this3.objects[0].centerY) * (_this3.mousePosY - _this3.objects[0].centerY)) < _this3.objects[0].circleRadius) {
+          if (Math.sqrt((event.touches[0].clientX - _this3.objects[0].centerX) * (event.touches[0].clientX - _this3.objects[0].centerX) + (event.touches[0].clientY - _this3.objects[0].centerY) * (event.touches[0].clientY - _this3.objects[0].centerY)) < _this3.objects[0].circleRadius) {
             if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 0.1 && _this3.clickable) {
               _this3.clickable = false;
               _this3.objects[0].active = 'expire';
 
               _this3.health.perfect();
 
-              hitSound.play();
+              _this3.hitSound.play();
 
               _this3.stats.updatePoints(1000);
 
@@ -560,7 +589,7 @@ function () {
 
               _this3.health.good();
 
-              hitSound.play();
+              _this3.hitSound.play();
 
               _this3.stats.updatePoints(300);
 
@@ -572,7 +601,7 @@ function () {
 
               _this3.health.poor();
 
-              hitSound.play();
+              _this3.hitSound.play();
 
               _this3.stats.updatePoints(100);
 
@@ -580,7 +609,8 @@ function () {
 
             } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 1.6 && _this3.clickable) {
               _this3.clickable = false;
-              missSound.play();
+
+              _this3.missSound.play();
 
               _this3.stats.updateMiss(1); //No points
 
@@ -712,9 +742,6 @@ function () {
         this.gameInstance.stopMusic();
         cancelAnimationFrame(this.requestID);
         window.removeEventListener('keydown');
-        setTimeout(function () {
-          return alert('refresh because it is a work in progress!');
-        }, 3000);
         return;
       }
     }
@@ -1213,8 +1240,9 @@ function () {
       ctx.font = "50px Teko";
       ctx.fillStyle = 'white';
       ctx.textBaseline = 'middle';
-      ctx.textAlign = 'right';
-      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135);
+      ctx.textAlign = 'right'; // ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
+
+      ctx.fillText("".concat(this.numMiss), this.gameInstance.canvas.width, 135);
       ctx.closePath();
     }
   }, {

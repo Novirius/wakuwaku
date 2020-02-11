@@ -41,7 +41,6 @@ export default class GameView {
     this.gameInstance.stopMusic();
     cancelAnimationFrame(this.requestID);
     window.removeEventListener('keydown')
-    setTimeout(() => alert('refresh because it is a work in progress!'), 3000)
     return;
     }
   }
