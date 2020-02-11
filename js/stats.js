@@ -32,7 +32,6 @@ export default class Stats {
 
     updatePerfect(number) {
         this.numPerfect += number;
-        debugger;
     }
 
     updateGood(number) {

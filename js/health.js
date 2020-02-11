@@ -22,34 +22,28 @@ export default class Health {
         //     setTimeout(() => that.cooldown = true, 1)
         // }
         this.value = this.value - 5;
-        // console.log(this.value)
     }
 
     perfect () {
         this.value = this.value + 10;
-        // console.log(this.value)
     }
 
     good () {
         this.value = this.value + 5;
-        // console.log(this.value)
     }
 
     poor () {
         this.value = this.value + 2;
-        // console.log(this.value)
     }
 
     update () {
         this.value -= this.decay;
         if (this.value <= 0) {
             this.gameView.stop();
-            // alert('gameover')
         }
         if (this.value > 100) {
             this.value = 100;
         }
-        // console.log(this.value)
     }
 
     outlineHP (ctx) {
@@ -80,6 +74,5 @@ export default class Health {
 
         ctx.fillStyle = grd;
         ctx.fill();
-        // console.log('hi')
     }
 }

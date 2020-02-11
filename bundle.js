@@ -381,7 +381,6 @@ function () {
   }, {
     key: "increasePlayTime",
     value: function increasePlayTime(dt) {
-      // console.log(dt)
       this.playTime += dt;
 
       if (this.playTime > 135) {
@@ -632,7 +631,7 @@ function () {
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'left';
       ctx.fillText("".concat(Math.floor(this.playTime), "s"), 25, this.canvas.height - 25);
-      ctx.closePath(); // console.log(this.playTime)
+      ctx.closePath();
     }
   }]);
 
@@ -723,16 +722,12 @@ function () {
     key: "animate",
     value: function animate() {
       if (!this.gameOver) {
-        var currentTime = Date.now(); // console.log(`current time: ${currentTime}`)
-        // console.log(`last time: ${this.lastTime}`)
-
-        var dt = (currentTime - this.lastTime) / 1000; // console.log(`difference time: ${dt}`)
-
+        var currentTime = Date.now();
+        var dt = (currentTime - this.lastTime) / 1000;
         this.lastTime = currentTime;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.gameInstance.increasePlayTime(dt);
-        this.gameInstance.draw(this.ctx, dt); // this.game.mouseStep(delta);
-
+        this.gameInstance.draw(this.ctx, dt);
         requestAnimationFrame(this.animate.bind(this));
       }
     }
@@ -790,22 +785,22 @@ function () {
       //     let that = this;
       //     setTimeout(() => that.cooldown = true, 1)
       // }
-      this.value = this.value - 5; // console.log(this.value)
+      this.value = this.value - 5;
     }
   }, {
     key: "perfect",
     value: function perfect() {
-      this.value = this.value + 10; // console.log(this.value)
+      this.value = this.value + 10;
     }
   }, {
     key: "good",
     value: function good() {
-      this.value = this.value + 5; // console.log(this.value)
+      this.value = this.value + 5;
     }
   }, {
     key: "poor",
     value: function poor() {
-      this.value = this.value + 2; // console.log(this.value)
+      this.value = this.value + 2;
     }
   }, {
     key: "update",
@@ -813,13 +808,12 @@ function () {
       this.value -= this.decay;
 
       if (this.value <= 0) {
-        this.gameView.stop(); // alert('gameover')
+        this.gameView.stop();
       }
 
       if (this.value > 100) {
         this.value = 100;
-      } // console.log(this.value)
-
+      }
     }
   }, {
     key: "outlineHP",
@@ -853,7 +847,7 @@ function () {
       grd.addColorStop(0.495, 'rgba(191, 241, 255, 1.000)');
       grd.addColorStop(1.000, 'rgba(247, 252, 184, 1.000)');
       ctx.fillStyle = grd;
-      ctx.fill(); // console.log('hi')
+      ctx.fill();
     }
   }]);
 
@@ -1174,7 +1168,6 @@ function () {
     key: "updatePerfect",
     value: function updatePerfect(number) {
       this.numPerfect += number;
-      debugger;
     }
   }, {
     key: "updateGood",

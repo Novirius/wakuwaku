@@ -65,7 +65,6 @@ export default class Game {
     }
 
     increasePlayTime (dt) {
-        // console.log(dt)
         this.playTime += dt
         if (this.playTime > 135) {
             this.gameView.stop();
@@ -295,7 +294,6 @@ export default class Game {
         ctx.textAlign = 'left';
         ctx.fillText(`${Math.floor(this.playTime)}s`, 25, this.canvas.height-25);
         ctx.closePath();
-        // console.log(this.playTime)
 
     }
 
