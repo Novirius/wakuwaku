@@ -40,7 +40,8 @@ export default class GameView {
     // this.gameInstance.resetScene();
     this.gameInstance.stopMusic();
     cancelAnimationFrame(this.requestID);
-    window.removeEventListener('keydown')
+    this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+    // window.removeEventListener('keydown')
     return;
     }
   }

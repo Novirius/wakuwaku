@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.globalCompositeOperation = 'destination-over'
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.9;
-    document.body.appendChild(canvas);
+    // document.body.appendChild(canvas);
     const game = new GameView(canvas,ctx);
     const welcomeSplash = document.getElementById('welcome-splash')
     const playButton = document.getElementById('play-button')

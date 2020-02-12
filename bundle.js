@@ -259,8 +259,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var ctx = canvas.getContext("2d");
   ctx.globalCompositeOperation = 'destination-over';
   canvas.width = window.innerWidth * 0.9;
-  canvas.height = window.innerHeight * 0.9;
-  document.body.appendChild(canvas);
+  canvas.height = window.innerHeight * 0.9; // document.body.appendChild(canvas);
+
   var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx);
   var welcomeSplash = document.getElementById('welcome-splash');
   var playButton = document.getElementById('play-button');
@@ -426,9 +426,9 @@ function () {
       } else if (this.playTime > 59 && this.playTime < 80) {
         timer = 1;
       } else if (this.playTime > 79 && this.playTime < 110) {
-        timer = 0.8;
+        timer = 0.9;
       } else {
-        timer = 0.7;
+        timer = 0.8;
       }
 
       var callback;
@@ -516,7 +516,7 @@ function () {
         _this3.mousePosX = event.clientX;
         _this3.mousePosY = event.clientY;
       });
-      window.addEventListener("keydown", this.handleGameInput // (event) => {
+      window.addEventListener("keydown", this.handleGameInput); // (event) => {
       //     switch(event.keyCode) {
       //         case 88:
       //             if (this.objects[0] instanceof Orb) {
@@ -566,7 +566,7 @@ function () {
       //             break;
       //     }
       // }
-      ); //touchscreens
+      //touchscreens
 
       window.addEventListener("touchstart", function (event) {
         if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
@@ -741,7 +741,8 @@ function () {
 
         this.gameInstance.stopMusic();
         cancelAnimationFrame(this.requestID);
-        window.removeEventListener('keydown');
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // window.removeEventListener('keydown')
+
         return;
       }
     }
@@ -812,7 +813,7 @@ function () {
       //     let that = this;
       //     setTimeout(() => that.cooldown = true, 1)
       // }
-      this.value = this.value - 5;
+      this.value = this.value - 10;
     }
   }, {
     key: "perfect",
@@ -1240,9 +1241,9 @@ function () {
       ctx.font = "50px Teko";
       ctx.fillStyle = 'white';
       ctx.textBaseline = 'middle';
-      ctx.textAlign = 'right'; // ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
+      ctx.textAlign = 'right';
+      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135); // ctx.fillText(`${this.numMiss}`, this.gameInstance.canvas.width, 135);
 
-      ctx.fillText("".concat(this.numMiss), this.gameInstance.canvas.width, 135);
       ctx.closePath();
     }
   }, {

@@ -109,10 +109,10 @@ export default class Game {
             timer = 1
         }
         else if ((this.playTime > 79) && (this.playTime < 110)) {
-            timer = 0.8
+            timer = 0.9
         }
         else {
-            timer = 0.7
+            timer = 0.8
         }
         let callback;
         for (let i = 1; i < (randomRange+1); i++) {
@@ -197,7 +197,7 @@ export default class Game {
             this.mousePosX = event.clientX;
             this.mousePosY = event.clientY;
         })
-        window.addEventListener("keydown", this.handleGameInput
+        window.addEventListener("keydown", this.handleGameInput)
         // (event) => {
         //     switch(event.keyCode) {
         //         case 88:
@@ -249,7 +249,7 @@ export default class Game {
         //     }
         // }
         
-        )
+        
         //touchscreens
         window.addEventListener("touchstart", (event) => {
             if (this.objects[0] instanceof Orb) {
