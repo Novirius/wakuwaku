@@ -324,8 +324,7 @@ function () {
     this.gameView = gameView; //Mousemove tracker
 
     this.mousePosX = 0;
-    this.mousePosY = 0;
-    this.clickable = true; //Dimensions
+    this.mousePosY = 0; //Dimensions
 
     this.maxWidth = this.canvas.width - 300;
     this.minWidth = 300;
@@ -341,7 +340,8 @@ function () {
 
     this.health = new _health__WEBPACK_IMPORTED_MODULE_3__["default"](1 / 13, 5, this, this.gameView);
     this.stats = new _stats__WEBPACK_IMPORTED_MODULE_5__["default"](this, this.gameView);
-    this.objects = []; //Points
+    this.objects = [];
+    this.dyingObjects = []; //Points
 
     this.points = 0; //bgm
 
@@ -365,7 +365,6 @@ function () {
     this.increasePlayTime = this.increasePlayTime.bind(this);
     this.removeObject = this.removeObject.bind(this);
     this.generateOrb = this.generateOrb.bind(this);
-    this.makeClickable = this.makeClickable.bind(this);
     this.expireOrbPointsReduction = this.expireOrbPointsReduction.bind(this);
     this.playMusic = this.playMusic.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
@@ -397,15 +396,10 @@ function () {
       }
     }
   }, {
-    key: "makeClickable",
-    value: function makeClickable() {
-      this.clickable = true;
-    }
-  }, {
     key: "removeObject",
     value: function removeObject() {
-      this.objects.shift();
-      this.makeClickable();
+      var dyingOrb = this.objects.shift();
+      this.dyingObjects.shift(dyingOrb);
     }
   }, {
     key: "generateManyOrbs",
@@ -418,7 +412,7 @@ function () {
       var timer = 1;
 
       if (this.playTime < 27) {
-        timer = 1.1;
+        timer = 5;
       } else if (this.playTime > 26 && this.playTime < 40) {
         timer = 1.3;
       } else if (this.playTime > 39 && this.playTime < 60) {
@@ -466,37 +460,38 @@ function () {
   }, {
     key: "handleGameInput",
     value: function handleGameInput(event) {
+      var currentOrb = this.objects[0];
+
       switch (event.keyCode) {
         //If key is z or x
         case 90:
         case 88:
-          if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
-            if (Math.sqrt((this.mousePosX - this.objects[0].centerX) * (this.mousePosX - this.objects[0].centerX) + (this.mousePosY - this.objects[0].centerY) * (this.mousePosY - this.objects[0].centerY)) < this.objects[0].circleRadius) {
-              if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.1 && this.clickable) {
+          if (currentOrb instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"] && this.clickable) {
+            if (Math.sqrt((this.mousePosX - currentOrb.centerX) * (this.mousePosX - currentOrb.centerX) + (this.mousePosY - currentOrb.centerY) * (this.mousePosY - currentOrb.centerY)) < currentOrb.circleRadius) {
+              if (currentOrb.ringRadius < currentOrb.initialRingRadius * 0.1 && currentOrb.ringRadius > 0) {
                 this.clickable = false;
-                this.objects[0].active = 'expire';
+                currentOrb.active = 'expire';
                 this.health.perfect();
                 this.hitSound.play();
                 this.stats.updatePoints(1000);
                 this.stats.updatePerfect(1); //perfect points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
+              } else if (currentOrb.ringRadius < currentOrb.initialRingRadius * 0.2) {
                 this.clickable = false;
-                this.objects[0].active = 'expire';
+                currentOrb.active = 'expire';
                 this.health.good();
                 this.hitSound.play();
                 this.stats.updatePoints(300);
                 this.stats.updateGood(1); //Good points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.4 && this.clickable) {
+              } else if (currentOrb.ringRadius < currentOrb.initialRingRadius * 0.4) {
                 this.clickable = false;
-                this.objects[0].active = 'expire';
+                currentOrb.active = 'expire';
                 this.health.poor();
                 this.hitSound.play();
                 this.stats.updatePoints(100);
                 this.stats.updatePoor(1); //Poor points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 1.6 && this.clickable) {
+              } else if (currentOrb.ringRadius < currentOrb.initialRingRadius * 1.6) {
                 this.clickable = false;
-                this.missSound.play();
-                this.stats.updateMiss(1); //No points
+                this.missSound.play(); //No points
               } else {}
             }
           }
@@ -516,57 +511,7 @@ function () {
         _this3.mousePosX = event.clientX;
         _this3.mousePosY = event.clientY;
       });
-      window.addEventListener("keydown", this.handleGameInput // (event) => {
-      //     switch(event.keyCode) {
-      //         case 88:
-      //             if (this.objects[0] instanceof Orb) {
-      //                 if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-      //                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.perfect();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(1000)
-      //                         this.stats.updatePerfect(1)
-      //                         //perfect points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.good();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(300)
-      //                         this.stats.updateGood(1)
-      //                         //Good points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.poor();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(100)
-      //                         this.stats.updatePoor(1)
-      //                         //Poor points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.missSound.play();
-      //                         this.stats.updateMiss(1)
-      //                         //No points
-      //                     }
-      //                     else {
-      //                     }
-      //                 }
-      //             }
-      //             // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
-      //             break;
-      //         case 82:
-      //             this.generateOrb();
-      //         default:
-      //             break;
-      //     }
-      // }
-      ); //touchscreens
+      window.addEventListener("keydown", this.handleGameInput); //touchscreens
 
       window.addEventListener("touchstart", function (event) {
         if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
@@ -628,7 +573,10 @@ function () {
       //Draw health
       this.health.draw(ctx); // particle1.update(ctx);
 
-      this.objects.forEach(function (object) {
+      var renderedObjects = this.objects.concat(this.dyingObjects);
+      renderedObjects.forEach(function (object) {
+        console.log(renderedObjects);
+        console.log(object);
         object.draw(ctx, dt);
       }); //Draw line between groups of orbs
 
@@ -661,7 +609,23 @@ function () {
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'left';
       ctx.fillText("".concat(Math.floor(this.playTime), "s"), 25, this.canvas.height - 25);
-      ctx.closePath();
+      ctx.closePath(); //Draw Test
+
+      var ellipse = new Path2D();
+      ellipse.ellipse(500, 500, 40, 60, Math.PI * .25, 0, 2 * Math.PI);
+      ctx.lineWidth = 25;
+      ctx.strokeStyle = 'red';
+      ctx.fill(ellipse);
+      ctx.stroke(ellipse);
+
+      if (ctx.isPointInStroke(ellipse, this.mousePosX, this.mousePosY)) {
+        ctx.strokeStyle = 'green';
+      } else {
+        ctx.strokeStyle = 'red';
+      }
+
+      ctx.fill(ellipse);
+      ctx.stroke(ellipse);
     }
   }]);
 
@@ -931,7 +895,8 @@ function () {
     this.game = game;
     this.path;
     this.callback = callback;
-    this.expiring = false; //Functions
+    this.expiring = false;
+    this.clickable = true; //Functions
 
     this.timerSize = this.timerSize.bind(this);
     this.activeOrb = this.activeOrb.bind(this);
@@ -939,11 +904,17 @@ function () {
     this.draw = this.draw.bind(this);
     this.expandRadiusFadeOut = this.expandRadiusFadeOut.bind(this);
     this.checkActive = this.checkActive.bind(this);
-  } //Timer Ring: Shows time remaining before orb expires. Decreases in size closer to expiration.
-  //IMPORTANT: ringRadius is the ADDITIONAL radius added on to circle radius. newRingRadius is circleRadius + ringRadius
-
+    this.notClickable = this.notClickable.bind(this);
+  }
 
   _createClass(Orb, [{
+    key: "notClickable",
+    value: function notClickable() {
+      this.clickable = false;
+    } //Timer Ring: Shows time remaining before orb expires. Decreases in size closer to expiration.
+    //IMPORTANT: ringRadius is the ADDITIONAL radius added on to circle radius. newRingRadius is circleRadius + ringRadius
+
+  }, {
     key: "timerSize",
     value: function timerSize(dt) {
       this.ringRadius = this.ringRadius - this.initialRingRadius / this.timer * dt * 3;
@@ -971,7 +942,6 @@ function () {
       if (this.ringRadius < 1 && !this.expiring) {
         this.expiring = true;
         this.active = 'expire';
-        this.game.makeClickable();
         this.game.expireOrbPointsReduction();
       }
     }
@@ -996,9 +966,6 @@ function () {
   }, {
     key: "activeOrb",
     value: function activeOrb(ctx, dt) {
-      //Test Code
-      // this.frame += 1;
-      // this.time += dt;
       //Timer Animation
       ctx.beginPath();
       ctx.arc(this.centerX, this.centerY, this.timerSize(dt), 0, 2 * Math.PI);
@@ -1022,8 +989,7 @@ function () {
       ctx.strokeStyle = _constants_js__WEBPACK_IMPORTED_MODULE_0__[this.color].circleEdge;
       ctx.stroke();
       ctx.save();
-      ctx.closePath(); //Testing
-      //Text font, color, and positioning
+      ctx.closePath(); //Text font, color, and positioning
 
       ctx.font = "30px Sans-Serif";
       ctx.fillStyle = 'white';
@@ -1037,10 +1003,8 @@ function () {
       this.checkActive(); //It never reahes zero since it subtracts a percentage of its current radius
 
       if (this.active != 'expire') {
-        this.activeOrb(ctx, dt); //TESTING TOP
-        //TESTING BOTTOM
+        this.activeOrb(ctx, dt);
       } else {
-        // alert(`${this.frame} in ${this.time}s`)
         this.expireOrb(ctx);
       }
 
@@ -1051,24 +1015,7 @@ function () {
           this.game.generateManyOrbs();
         }
       }
-    } // draw (ctx, dt, canvas) {
-    //     //Create Arc
-    //     ctx.beginPath();
-    //     const length = this.circleRadius * 2
-    //     const lineThickness = length + 5
-    //     ctx.lineWidth = lineThickness;
-    //     ctx.lineCap = "round";
-    //     CONSTANT.shortArc.bottomRight.translateBottom(ctx, length);
-    //     CONSTANT.shortArc.bottomRight.createArc(ctx, this.centerX, this.centerY, length)
-    //     ctx.strokeStyle = '#e9e9e9';
-    //     ctx.stroke();
-    //     ctx.lineWidth = 95;
-    //     ctx.strokeStyle = '#16151f';
-    //     ctx.stroke();
-    //     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    //     ctx.closePath();
-    // }
-
+    }
   }]);
 
   return Orb;
