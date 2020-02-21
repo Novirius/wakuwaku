@@ -245,13 +245,7 @@ var SPINNER = '⥁'; // export const rainbowRing = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./js/constants.js");
-/* harmony import */ var _orbs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./orbs */ "./js/orbs.js");
-/* harmony import */ var _game_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game_view.js */ "./js/game_view.js");
-/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game */ "./js/game.js");
-
-
-
+/* harmony import */ var _game_view_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game_view.js */ "./js/game_view.js");
  // Create the canvas
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -260,13 +254,17 @@ document.addEventListener("DOMContentLoaded", function () {
   ctx.globalCompositeOperation = 'destination-over';
   canvas.width = window.innerWidth * 0.9;
   canvas.height = window.innerHeight * 0.9; // document.body.appendChild(canvas);
+  // const game = new GameView(canvas,ctx);
 
-  var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_2__["default"](canvas, ctx);
   var welcomeSplash = document.getElementById('welcome-splash');
+  var gameoverOverlay = document.getElementById('gameover');
   var playButton = document.getElementById('play-button');
+  var retryButton = document.getElementById('retry');
   var countdown = new Audio();
   countdown.src = "assets/music/smash_countdown.mp3";
-  playButton.addEventListener('click', function () {
+
+  var beginGame = function beginGame() {
+    var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx);
     welcomeSplash.classList.add("hide");
     countdown.play();
     setTimeout(function () {
@@ -275,10 +273,21 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(function () {
       return countdown.pause();
     }, 4500);
+  };
+
+  playButton.addEventListener('click', beginGame);
+  retryButton.addEventListener('click', function () {
+    var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx);
+    gameoverOverlay.classList.add("hide");
+    countdown.play();
+    setTimeout(function () {
+      return game.start();
+    }, 5000);
+    setTimeout(function () {
+      return countdown.pause();
+    }, 4500);
   });
-}); // addEventListener('mousedown', e => console.log(e))
-// addEventListener('mousemove', e => console.log(e))
-// addEventListener('mousedown', e => console.log(e))
+});
 
 /***/ }),
 
@@ -370,6 +379,7 @@ function () {
     this.playMusic = this.playMusic.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.handleGameInput = this.handleGameInput.bind(this);
+    this.interactWithOrb = this.interactWithOrb.bind(this);
   }
 
   _createClass(Game, [{
@@ -418,7 +428,7 @@ function () {
       var timer = 1;
 
       if (this.playTime < 27) {
-        timer = 1.1;
+        timer = 1.5;
       } else if (this.playTime > 26 && this.playTime < 40) {
         timer = 1.3;
       } else if (this.playTime > 39 && this.playTime < 60) {
@@ -464,42 +474,86 @@ function () {
       this.stats.updateMiss(1);
     }
   }, {
+    key: "interactWithOrb",
+    value: function interactWithOrb() {
+      if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+        if (Math.sqrt((this.mousePosX - this.objects[0].centerX) * (this.mousePosX - this.objects[0].centerX) + (this.mousePosY - this.objects[0].centerY) * (this.mousePosY - this.objects[0].centerY)) < this.objects[0].circleRadius) {
+          if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.1 && this.clickable) {
+            this.clickable = false;
+            this.objects[0].active = 'expire';
+            this.health.perfect();
+            this.hitSound.play();
+            this.stats.updatePoints(1000);
+            this.stats.updatePerfect(1); //perfect points
+          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
+            this.clickable = false;
+            this.objects[0].active = 'expire';
+            this.health.good();
+            this.hitSound.play();
+            this.stats.updatePoints(300);
+            this.stats.updateGood(1); //Good points
+          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.4 && this.clickable) {
+            this.clickable = false;
+            this.objects[0].active = 'expire';
+            this.health.poor();
+            this.hitSound.play();
+            this.stats.updatePoints(100);
+            this.stats.updatePoor(1); //Poor points
+          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 1.6 && this.clickable) {
+            this.clickable = false;
+            this.missSound.play();
+            this.stats.updateMiss(1); //No points
+          } else {}
+        }
+      }
+    }
+  }, {
     key: "handleGameInput",
     value: function handleGameInput(event) {
       switch (event.keyCode) {
+        //Mouse click
         //If key is z or x
         case 90:
         case 88:
-          if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
-            if (Math.sqrt((this.mousePosX - this.objects[0].centerX) * (this.mousePosX - this.objects[0].centerX) + (this.mousePosY - this.objects[0].centerY) * (this.mousePosY - this.objects[0].centerY)) < this.objects[0].circleRadius) {
-              if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.1 && this.clickable) {
-                this.clickable = false;
-                this.objects[0].active = 'expire';
-                this.health.perfect();
-                this.hitSound.play();
-                this.stats.updatePoints(1000);
-                this.stats.updatePerfect(1); //perfect points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
-                this.clickable = false;
-                this.objects[0].active = 'expire';
-                this.health.good();
-                this.hitSound.play();
-                this.stats.updatePoints(300);
-                this.stats.updateGood(1); //Good points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.4 && this.clickable) {
-                this.clickable = false;
-                this.objects[0].active = 'expire';
-                this.health.poor();
-                this.hitSound.play();
-                this.stats.updatePoints(100);
-                this.stats.updatePoor(1); //Poor points
-              } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 1.6 && this.clickable) {
-                this.clickable = false;
-                this.missSound.play();
-                this.stats.updateMiss(1); //No points
-              } else {}
-            }
-          }
+          this.interactWithOrb(); // if (this.objects[0] instanceof Orb) {
+          //     if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+          //         if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+          //             this.clickable = false;
+          //             this.objects[0].active = 'expire';
+          //             this.health.perfect();
+          //             this.hitSound.play();
+          //             this.stats.updatePoints(1000)
+          //             this.stats.updatePerfect(1)
+          //             //perfect points
+          //         }
+          //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+          //             this.clickable = false;
+          //             this.objects[0].active = 'expire';
+          //             this.health.good();
+          //             this.hitSound.play();
+          //             this.stats.updatePoints(300)
+          //             this.stats.updateGood(1)
+          //             //Good points
+          //         }
+          //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+          //             this.clickable = false;
+          //             this.objects[0].active = 'expire';
+          //             this.health.poor();
+          //             this.hitSound.play();
+          //             this.stats.updatePoints(100)
+          //             this.stats.updatePoor(1)
+          //             //Poor points
+          //         }
+          //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+          //             this.clickable = false;
+          //             this.missSound.play();
+          //             this.stats.updateMiss(1)
+          //             //No points
+          //         }
+          //         else {
+          //         }
+          //     }
+          // }
 
           break;
 
@@ -515,58 +569,10 @@ function () {
       this.canvas.addEventListener('mousemove', function (event) {
         _this3.mousePosX = event.clientX;
         _this3.mousePosY = event.clientY;
-      });
-      window.addEventListener("keydown", this.handleGameInput); // (event) => {
-      //     switch(event.keyCode) {
-      //         case 88:
-      //             if (this.objects[0] instanceof Orb) {
-      //                 if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-      //                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.perfect();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(1000)
-      //                         this.stats.updatePerfect(1)
-      //                         //perfect points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.good();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(300)
-      //                         this.stats.updateGood(1)
-      //                         //Good points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.objects[0].active = 'expire';
-      //                         this.health.poor();
-      //                         this.hitSound.play();
-      //                         this.stats.updatePoints(100)
-      //                         this.stats.updatePoor(1)
-      //                         //Poor points
-      //                     }
-      //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
-      //                         this.clickable = false;
-      //                         this.missSound.play();
-      //                         this.stats.updateMiss(1)
-      //                         //No points
-      //                     }
-      //                     else {
-      //                     }
-      //                 }
-      //             }
-      //             // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
-      //             break;
-      //         case 82:
-      //             this.generateOrb();
-      //         default:
-      //             break;
-      //     }
-      // }
-      //touchscreens
+      }); //Handle user pressing x or z
+
+      window.addEventListener("keydown", this.handleGameInput);
+      window.addEventListener("click", this.interactWithOrb); //touchscreens
 
       window.addEventListener("touchstart", function (event) {
         if (_this3.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
@@ -742,18 +748,20 @@ function () {
         this.gameInstance.stopMusic();
         cancelAnimationFrame(this.requestID);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // window.removeEventListener('keydown')
-
-        return;
       }
+
+      var gameoverOverlay = document.getElementById('gameover');
+      gameoverOverlay.classList.remove('hide'); // setTimeout(()=>gameoverOverlay.classList.remove('hide'), 3000)
     }
   }, {
     key: "animate",
     value: function animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
       if (!this.gameOver) {
         var currentTime = Date.now();
         var dt = (currentTime - this.lastTime) / 1000;
         this.lastTime = currentTime;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.gameInstance.increasePlayTime(dt);
         this.gameInstance.draw(this.ctx, dt);
         requestAnimationFrame(this.animate.bind(this));
@@ -813,7 +821,7 @@ function () {
       //     let that = this;
       //     setTimeout(() => that.cooldown = true, 1)
       // }
-      this.value = this.value - 10;
+      this.value = this.value - 6;
     }
   }, {
     key: "perfect",

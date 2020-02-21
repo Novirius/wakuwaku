@@ -34,27 +34,30 @@ export default class GameView {
 
   stop () {
     if (this.requestId) {
-    this.gameOver = true;
-    // this.gameInstance.bindEventListener(this.canvas);
-    // this.gameInstance.beginTimer();
-    // this.gameInstance.resetScene();
-    this.gameInstance.stopMusic();
-    cancelAnimationFrame(this.requestID);
-    this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
-    // window.removeEventListener('keydown')
-    return;
+      this.gameOver = true;
+      // this.gameInstance.bindEventListener(this.canvas);
+      // this.gameInstance.beginTimer();
+      // this.gameInstance.resetScene();
+      this.gameInstance.stopMusic();
+      cancelAnimationFrame(this.requestID);
+      this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+      // window.removeEventListener('keydown')
     }
+    const gameoverOverlay = document.getElementById('gameover')
+    gameoverOverlay.classList.remove('hide')
+    // setTimeout(()=>gameoverOverlay.classList.remove('hide'), 3000)
   }
 
   animate () {  
-    if (!this.gameOver) {
-    let currentTime = Date.now();
-    let dt = (currentTime - this.lastTime)/1000;
-    this.lastTime = currentTime;
     this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
-    this.gameInstance.increasePlayTime(dt)
-    this.gameInstance.draw(this.ctx, dt);
-    requestAnimationFrame(this.animate.bind(this));
+    if (!this.gameOver) {
+      let currentTime = Date.now();
+      let dt = (currentTime - this.lastTime)/1000;
+      this.lastTime = currentTime;
+      this.gameInstance.increasePlayTime(dt)
+      this.gameInstance.draw(this.ctx, dt);
+      requestAnimationFrame(this.animate.bind(this));
     }
+    
   }
 }

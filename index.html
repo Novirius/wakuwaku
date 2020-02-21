@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
-
+    <script src="https://kit.fontawesome.com/b3bfcf250f.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="container"></div>
@@ -24,6 +24,14 @@
         <p>The game is over when your health bar reaches zero or the song finishes</p>
         <button id="play-button">Play</button>
       </div>
+      <div id="gameover" class="hide">
+        <div class="gameover-text">
+          <span>GAME OVER...</span>
+        </div>
+        <div id="retry" class="playagain-button">
+          <span>Play Again?</span> <i class="fas fa-sync-alt"></i>
+        </div>
+      </div>
       <canvas id="game-canvas" width="500" height="800">
 
     </div>
@@ -31,3 +39,4 @@
   </body>
 </html>
 
+ 

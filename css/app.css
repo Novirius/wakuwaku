@@ -17,7 +17,7 @@ body {
     background-attachment: fixed;
     background-size: cover; */
     font-family: 'Karla', sans-serif;
-
+    margin: 0px
 }
 
 @keyframes fadein {
@@ -86,4 +86,74 @@ body {
 
   .hide {
     display: none !important;
+  }
+
+  #gameover {
+    position: absolute;
+    background-color: #212121;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+    animation-name: fadein;
+    animation-duration: 2s;
+  }
+
+  .gameover-text {
+    color: white;
+    font-size: 25rem;
+  }
+
+  .playagain-button {
+    /* background: linear-gradient(90deg, rgba(237,111,158,1) 0%, rgba(236,139,106,1) 100%); */
+    background-image: linear-gradient(to right, #ed6ea0, #ec8c69, #f7186a , #FBB03B);
+    color: white;
+    border: 10px solid white;
+    width: 60%;
+    height: 40%;
+    font-size: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100rem;
+    opacity: 0.5;
+    transition: all 0.5s;
+    background-size: 300% 100%;
+  }
+
+  .playagain-button > .fas {
+    margin-left: 5%;
+  }
+
+  @keyframes clockspin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes fadein {
+    0% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .playagain-button:hover > .fas{
+    animation: clockspin 2s linear infinite;
+  }
+
+  .playagain-button:hover {
+    /* animation-name: pinkfill;
+    animation-duration: 3s;
+    animation-fill-mode: forwards; */
+    opacity: 1;
+    background-position: 100% 0;
   }

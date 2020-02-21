@@ -60,6 +60,7 @@ export default class Game {
         this.playMusic = this.playMusic.bind(this);
         this.stopMusic = this.stopMusic.bind(this);
         this.handleGameInput = this.handleGameInput.bind(this);
+        this.interactWithOrb = this.interactWithOrb.bind(this);
     }
 
     playMusic() {
@@ -97,7 +98,7 @@ export default class Game {
 
         let timer = 1;
         if (this.playTime < 27) {
-            timer = 1.1
+            timer = 1.5
         }
         else if ((this.playTime > 26) && (this.playTime < 40)) {
             timer = 1.3
@@ -130,7 +131,6 @@ export default class Game {
         //Select random Arc
         const randomShortArcIndex = Math.floor(Math.random()*CONSTANT.SHORT_ARCS_ARRAY.length);
         const randomShortArc = CONSTANT.SHORT_ARCS_ARRAY[randomShortArcIndex];
-
         //Create Orb
         const orb = new Orb((Math.random()*(this.maxWidth - this.minWidth)) + this.minWidth, (Math.random()*(this.maxHeight - this.minHeight)) + this.minHeight, this.orbSize, color , number, this.ringSize, timer, this, callback)
         setTimeout(() => this.objects.push(orb), (number-1) * (timer * 500))
@@ -142,50 +142,95 @@ export default class Game {
         this.stats.updateMiss(1)
     }
 
+    interactWithOrb () {
+        if (this.objects[0] instanceof Orb) {
+            if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+                if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                    this.clickable = false;
+                    this.objects[0].active = 'expire';
+                    this.health.perfect();
+                    this.hitSound.play();
+                    this.stats.updatePoints(1000)
+                    this.stats.updatePerfect(1)
+                    //perfect points
+                }
+                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+                    this.clickable = false;
+                    this.objects[0].active = 'expire';
+                    this.health.good();
+                    this.hitSound.play();
+                    this.stats.updatePoints(300)
+                    this.stats.updateGood(1)
+                    //Good points
+                }
+                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                    this.clickable = false;
+                    this.objects[0].active = 'expire';
+                    this.health.poor();
+                    this.hitSound.play();
+                    this.stats.updatePoints(100)
+                    this.stats.updatePoor(1)
+                    //Poor points
+                }
+                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+                    this.clickable = false;
+                    this.missSound.play();
+                    this.stats.updateMiss(1)
+                    //No points
+                }
+                else {
+                }
+            }
+        }
+    }
+
     handleGameInput(event) {
         switch(event.keyCode) {
+            //Mouse click
             //If key is z or x
             case 90:
             case 88:
-                if (this.objects[0] instanceof Orb) {
-                    if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-                        if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
-                            this.clickable = false;
-                            this.objects[0].active = 'expire';
-                            this.health.perfect();
-                            this.hitSound.play();
-                            this.stats.updatePoints(1000)
-                            this.stats.updatePerfect(1)
-                            //perfect points
-                        }
-                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
-                            this.clickable = false;
-                            this.objects[0].active = 'expire';
-                            this.health.good();
-                            this.hitSound.play();
-                            this.stats.updatePoints(300)
-                            this.stats.updateGood(1)
-                            //Good points
-                        }
-                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
-                            this.clickable = false;
-                            this.objects[0].active = 'expire';
-                            this.health.poor();
-                            this.hitSound.play();
-                            this.stats.updatePoints(100)
-                            this.stats.updatePoor(1)
-                            //Poor points
-                        }
-                        else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
-                            this.clickable = false;
-                            this.missSound.play();
-                            this.stats.updateMiss(1)
-                            //No points
-                        }
-                        else {
-                        }
-                    }
-                }
+                this.interactWithOrb();
+                // if (this.objects[0] instanceof Orb) {
+                //     if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
+                //         if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                //             this.clickable = false;
+                //             this.objects[0].active = 'expire';
+                //             this.health.perfect();
+                //             this.hitSound.play();
+                //             this.stats.updatePoints(1000)
+                //             this.stats.updatePerfect(1)
+                //             //perfect points
+                //         }
+                //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+                //             this.clickable = false;
+                //             this.objects[0].active = 'expire';
+                //             this.health.good();
+                //             this.hitSound.play();
+                //             this.stats.updatePoints(300)
+                //             this.stats.updateGood(1)
+                //             //Good points
+                //         }
+                //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                //             this.clickable = false;
+                //             this.objects[0].active = 'expire';
+                //             this.health.poor();
+                //             this.hitSound.play();
+                //             this.stats.updatePoints(100)
+                //             this.stats.updatePoor(1)
+                //             //Poor points
+                //         }
+                //         else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
+                //             this.clickable = false;
+                //             this.missSound.play();
+                //             this.stats.updateMiss(1)
+                //             //No points
+                //         }
+                //         else {
+                //         }
+                //     }
+                // }
+                
                 break;
             default:
                 break;
@@ -197,59 +242,9 @@ export default class Game {
             this.mousePosX = event.clientX;
             this.mousePosY = event.clientY;
         })
+        //Handle user pressing x or z
         window.addEventListener("keydown", this.handleGameInput)
-        // (event) => {
-        //     switch(event.keyCode) {
-        //         case 88:
-        //             if (this.objects[0] instanceof Orb) {
-        //                 if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-        //                     if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
-        //                         this.clickable = false;
-        //                         this.objects[0].active = 'expire';
-        //                         this.health.perfect();
-        //                         this.hitSound.play();
-        //                         this.stats.updatePoints(1000)
-        //                         this.stats.updatePerfect(1)
-        //                         //perfect points
-        //                     }
-        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
-        //                         this.clickable = false;
-        //                         this.objects[0].active = 'expire';
-        //                         this.health.good();
-        //                         this.hitSound.play();
-        //                         this.stats.updatePoints(300)
-        //                         this.stats.updateGood(1)
-        //                         //Good points
-        //                     }
-        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
-        //                         this.clickable = false;
-        //                         this.objects[0].active = 'expire';
-        //                         this.health.poor();
-        //                         this.hitSound.play();
-        //                         this.stats.updatePoints(100)
-        //                         this.stats.updatePoor(1)
-        //                         //Poor points
-        //                     }
-        //                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
-        //                         this.clickable = false;
-        //                         this.missSound.play();
-        //                         this.stats.updateMiss(1)
-        //                         //No points
-        //                     }
-        //                     else {
-        //                     }
-        //                 }
-        //             }
-        //             // alert(`${this.mousePosX} is x, ${this.mousePosY} is y`)
-        //             break;
-        //         case 82:
-        //             this.generateOrb();
-        //         default:
-        //             break;
-        //     }
-        // }
-        
-        
+        window.addEventListener("click", this.interactWithOrb)
         //touchscreens
         window.addEventListener("touchstart", (event) => {
             if (this.objects[0] instanceof Orb) {
