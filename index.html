@@ -18,11 +18,29 @@
   <body>
     <div id="container"></div>
       <div id="welcome-splash">
-        <h1>How to play</h1>
-        <p>Collect points by hovering over circles, in order, and hitting the 'x' key. The closer the ring is to the circle, the more points you get.</p>
-        <p>Over time, your health depletes. Recover health by collecting points. You only get to attempted each circle once, so make it count!</p>
-        <p>The game is over when your health bar reaches zero or the song finishes</p>
-        <button id="play-button">Play</button>
+        <div class="instructions">
+          <!-- <h1>The UI</h1>
+            <p>The top left of the screen displays your HP (Health). If this reaches zero, you lose.</p>
+            <p>The top right of the screen displays your score and accuracy</p>
+            <p>The bottom left shows the time you have spent playing</p> -->
+            <div class="game-title">
+              <div>わ</div>
+              <div>く</div>
+              <div>わ</div>
+              <div>く</div>
+              <div>！</div>
+              <div>！</div>
+              <div>！</div>
+            </div>
+            <p><span style="text-decoration: underline;">Objective</span>: Pop orb before the ring around the circle reaches the orb</p>
+            <p><span style="text-decoration: underline;">How to pop orb</span>: Click on orb or press the 'x' key while the mouse is over the orb</p>
+            <p><span style="text-decoration: underline;">Your HP</span>: It depletes over time. Clicking an orb recovers HP.</p>
+            <p><span style="text-decoration: underline;">Warning</span>: You only get one chance to pop each orb. Make it count!</p>
+            <p>The game is over when your health bar reaches zero or the song finishes</p>
+        </div>
+        <div class="button-side">
+          <button id="play-button">Play</button>
+        </div>
       </div>
       <div id="gameover" class="hide">
         <div class="gameover-text">
