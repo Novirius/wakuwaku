@@ -44,7 +44,13 @@ export default class GameView {
       // window.removeEventListener('keydown')
     }
     const gameoverOverlay = document.getElementById('gameover')
-    gameoverOverlay.classList.remove('hide')
+    gameoverOverlay.classList.remove('hide');
+    const cursor2 = document.getElementById('cursor2')
+    const handleMouseMove2 = (e) => {
+      cursor2.setAttribute("style", "top: "+(e.pageY-15)+"px; left: "+(e.pageX-15)+"px;")
+    }
+    document.addEventListener('mousemove', handleMouseMove2)
+    cursor2.classList.remove("hide");
     // setTimeout(()=>gameoverOverlay.classList.remove('hide'), 3000)
   }
 

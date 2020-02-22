@@ -175,7 +175,7 @@ export default class Game {
                 else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
                     this.clickable = false;
                     this.missSound.play();
-                    this.stats.updateMiss(1)
+                    // this.stats.updateMiss(1)
                     //No points
                 }
                 else {
@@ -279,7 +279,7 @@ export default class Game {
                     else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 1.6)) && this.clickable) {
                         this.clickable = false;
                         this.missSound.play();
-                        this.stats.updateMiss(1)
+                        // this.stats.updateMiss(1)
                         //No points
                     }
                     else {

@@ -262,10 +262,20 @@ document.addEventListener("DOMContentLoaded", function () {
   var retryButton = document.getElementById('retry');
   var countdown = new Audio();
   countdown.src = "assets/music/smash_countdown.mp3";
+  var cursor = document.getElementById('cursor');
+  var cursor2 = document.getElementById('cursor2');
+
+  var handleMouseMove = function handleMouseMove(e) {
+    cursor.setAttribute("style", "top: " + (e.pageY - 15) + "px; left: " + (e.pageX - 15) + "px;");
+  };
+
+  document.addEventListener('mousemove', handleMouseMove);
 
   var beginGame = function beginGame() {
     var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx);
     welcomeSplash.classList.add("hide");
+    cursor.classList.add("hide");
+    document.removeEventListener('mousemove', handleMouseMove);
     countdown.play();
     setTimeout(function () {
       return game.start();
@@ -279,6 +289,13 @@ document.addEventListener("DOMContentLoaded", function () {
   retryButton.addEventListener('click', function () {
     var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx);
     gameoverOverlay.classList.add("hide");
+
+    var handleMouseMove2 = function handleMouseMove2(e) {
+      cursor2.setAttribute("style", "top: " + (e.pageY - 15) + "px; left: " + (e.pageX - 15) + "px;");
+    };
+
+    document.removeEventListener('mousemove', handleMouseMove2);
+    cursor2.classList.add("hide");
     countdown.play();
     setTimeout(function () {
       return game.start();
@@ -501,8 +518,8 @@ function () {
             this.stats.updatePoor(1); //Poor points
           } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 1.6 && this.clickable) {
             this.clickable = false;
-            this.missSound.play();
-            this.stats.updateMiss(1); //No points
+            this.missSound.play(); // this.stats.updateMiss(1)
+            //No points
           } else {}
         }
       }
@@ -616,9 +633,8 @@ function () {
             } else if (_this3.objects[0].ringRadius < _this3.objects[0].initialRingRadius * 1.6 && _this3.clickable) {
               _this3.clickable = false;
 
-              _this3.missSound.play();
-
-              _this3.stats.updateMiss(1); //No points
+              _this3.missSound.play(); // this.stats.updateMiss(1)
+              //No points
 
             } else {}
           }
@@ -751,7 +767,15 @@ function () {
       }
 
       var gameoverOverlay = document.getElementById('gameover');
-      gameoverOverlay.classList.remove('hide'); // setTimeout(()=>gameoverOverlay.classList.remove('hide'), 3000)
+      gameoverOverlay.classList.remove('hide');
+      var cursor2 = document.getElementById('cursor2');
+
+      var handleMouseMove2 = function handleMouseMove2(e) {
+        cursor2.setAttribute("style", "top: " + (e.pageY - 15) + "px; left: " + (e.pageX - 15) + "px;");
+      };
+
+      document.addEventListener('mousemove', handleMouseMove2);
+      cursor2.classList.remove("hide"); // setTimeout(()=>gameoverOverlay.classList.remove('hide'), 3000)
     }
   }, {
     key: "animate",

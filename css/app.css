@@ -6,8 +6,20 @@ html {
     -o-background-size: cover;
     background-size: cover;
     font-family: 'Karla', sans-serif;
+    /* cursor: cell; */
+    /* cursor: url('https://i.imgur.com/mAjwtNY.png') 16 16, auto; */
+    cursor: url("../assets/images/blueblurcursor.png"), auto;
+    /* -webkit-animation: cursor 2s infinite ease;
+    animation: cursor 2s infinite ease; */
+  }
 
-    cursor: url('https://i.imgur.com/mAjwtNY.png') 16 16, auto;
+  @keyframes cursor {
+    0% {cursor: url("../assets/images/cursorph1.png"), auto;}
+    25% {cursor: url("../assets/images/cursorph2.png"), auto;}
+    50% {cursor: url("../assets/images/cursorph1.png"), auto;}
+    75% {cursor: url("../assets/images/cursorph2.png"), auto;}
+    100% {cursor: url("../assets/images/cursorph1.png"), auto;}
+    /* 100% {cursor: url("../assets/images/cursor6.png"), auto;} */
   }
 
 body {
@@ -17,7 +29,65 @@ body {
     background-attachment: fixed;
     background-size: cover; */
     font-family: 'Karla', sans-serif;
-    margin: 0px
+    margin: 0px;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+#cursor {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition-duration: 1ms;
+  transition-timing-function: ease-out;
+  border: 2px solid white;
+  z-index: 1000;
+
+
+  background-color: #fff;
+  box-shadow:
+  0 0 15px 7px #fff,
+  0 0 25px 15px #f0f,
+  0 0 35px 22px #0ff;
+
+
+  /* box-shadow:
+  0 0 15px 7px #fff,
+  0 0 25px 15px rgb(255, 217, 0),
+  0 0 35px 22px rgb(255, 0, 106); */
+}
+
+#cursor2 {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition-duration: 1ms;
+  transition-timing-function: ease-out;
+  border: 2px solid white;
+  z-index: 1000;
+
+
+  background-color: #fff;
+  /* box-shadow:
+  0 0 15px 7px #fff,
+  0 0 25px 15px #f0f,
+  0 0 35px 22px #0ff; */
+
+
+  box-shadow:
+  0 0 15px 7px #fff,
+  0 0 25px 15px rgb(255, 217, 0),
+  0 0 35px 22px rgb(255, 0, 106);
 }
 
 @keyframes fadein {
@@ -68,6 +138,7 @@ body {
     color: white;
     /* animation-name: fadein;
     animation-duration: 2s; */
+    cursor: none;
   }
 
   .button-side {
@@ -101,7 +172,7 @@ body {
 
   #welcome-splash button:hover {
     background-color: #ffd224;
-    cursor: pointer;
+    cursor: none;
   }
 
   .instructions {
@@ -161,6 +232,7 @@ body {
     justify-content: space-evenly;
     animation-name: fadein;
     animation-duration: 2s;
+    cursor: none;
   }
 
   .gameover-text {
@@ -217,4 +289,5 @@ body {
     animation-fill-mode: forwards; */
     opacity: 1;
     background-position: 100% 0;
+    cursor: none;
   }
