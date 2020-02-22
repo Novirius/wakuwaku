@@ -42,6 +42,7 @@ body {
 
 #cursor {
   position: fixed;
+  left: 3%;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -147,6 +148,24 @@ body {
     justify-content: center;
   }
 
+  @keyframes bounce {
+    0% {
+      transform: scale(1,1) translate(0px, 0px);
+    }
+
+    30%{
+      transform: scale(1,1) translate(0px, 10px); 
+    }
+
+    75%{
+      transform: scale(1,1) translate(0px, -25px); 
+    }
+
+    100% {
+      transform: scale(1,1) translate(0px, 0px);
+    }
+  }
+
   #play-button {
     padding: 15px 10px;
     background-image: linear-gradient(to right, #667eea, #764ba2, #6B8DD6, #8E37D7);
@@ -162,6 +181,8 @@ body {
     opacity: 0.5;
     transition: all 0.5s;
     background-size: 300% 100%;
+    /* animation: bounce 0.4s;
+    animation-iteration-count: 5; */
   }
 
   #play-button:hover {
@@ -198,6 +219,8 @@ body {
     font-weight: 700;
     margin-bottom: 0.1em;
     animation: text-pop 0.5s infinite;
+    text-shadow: -1px 0 #667eea, 0 0.05em #667eea, 0px 0 #667eea, 0 -1px #667eea;
+    text-shadow: -1px 0 #667eea, 0 0.05em #667eea, 0px 0 #667eea, 0 -1px #667eea;
   }
 
 
