@@ -22,7 +22,7 @@ export default class Stats {
 
     updateHitPercentage () {
         const hitPercentage = 100*((this.numPerfect + this.numGood + this.numPoor)/(this.numPerfect + this.numGood + this.numPoor + this.numMiss))
-        const rounded = Math.floor((hitPercentage*1000))/1000
+        const rounded = Math.floor((hitPercentage*100))/100
         return rounded;
     }
 

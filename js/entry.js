@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const retryButton = document.getElementById('retry')
     const countdown = new Audio();
     countdown.src = "assets/music/smash_countdown.mp3";
+    const mainMenuBGM = new Audio();
+    mainMenuBGM.src = "assets/music/mainMenuBGM.mp3";
     const cursor = document.getElementById('cursor')
     const cursor2 = document.getElementById('cursor2')
     const handleMouseMove = (e) => {
@@ -45,6 +47,5 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => game.start(), 5000)
         setTimeout(() => countdown.pause(), 4500)
     })
-    
 })
 

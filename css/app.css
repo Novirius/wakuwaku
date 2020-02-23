@@ -42,7 +42,7 @@ body {
 
 #cursor {
   position: fixed;
-  left: 3%;
+  left: -10%;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -68,6 +68,7 @@ body {
 
 #cursor2 {
   position: fixed;
+  left: -10%;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -220,7 +221,7 @@ body {
     margin-bottom: 0.1em;
     animation: text-pop 0.5s infinite;
     text-shadow: -1px 0 #667eea, 0 0.05em #667eea, 0px 0 #667eea, 0 -1px #667eea;
-    text-shadow: -1px 0 #667eea, 0 0.05em #667eea, 0px 0 #667eea, 0 -1px #667eea;
+    /* text-shadow: -1px 0 #667eea, 0 0.05em #667eea, 0px 0 #667eea, 0 -1px #667eea; */
   }
 
 
@@ -261,6 +262,7 @@ body {
   .gameover-text {
     color: white;
     font-size: 12em;
+    /* text-shadow: -1px 0 #fc035a, 0 0.05em #fc035a, 0px 0 #fc035a, 0 -1px #fc035a; */
   }
 
   .playagain-button {
