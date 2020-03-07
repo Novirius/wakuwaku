@@ -253,9 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var ctx = canvas.getContext("2d");
   ctx.globalCompositeOperation = 'destination-over';
   canvas.width = window.innerWidth * 0.9;
-  canvas.height = window.innerHeight * 0.9; // document.body.appendChild(canvas);
-  // const game = new GameView(canvas,ctx);
-
+  canvas.height = window.innerHeight * 0.9;
   var welcomeSplash = document.getElementById('welcome-splash');
   var gameoverOverlay = document.getElementById('gameover');
   var playButton = document.getElementById('play-button');
@@ -1215,8 +1213,8 @@ function () {
   _createClass(Stats, [{
     key: "updateHitPercentage",
     value: function updateHitPercentage() {
-      var hitPercentage = 100 * ((this.numPerfect + this.numGood + this.numPoor) / (this.numPerfect + this.numGood + this.numPoor + this.numMiss));
-      var rounded = Math.floor(hitPercentage * 1000) / 1000;
+      var hitPercentage = 100 * ((this.numPerfect + this.numGood + this.numPoor + 0) / (this.numPerfect + this.numGood + this.numPoor + this.numMiss + 0));
+      var rounded = Math.floor(hitPercentage * 100) / 100;
       return rounded;
     }
   }, {
@@ -1274,8 +1272,11 @@ function () {
       ctx.fillStyle = 'white';
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'right';
-      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135); // ctx.fillText(`${this.numMiss}`, this.gameInstance.canvas.width, 135);
-
+      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135);
+      ctx.fillText("Miss: ".concat(this.numMiss), this.gameInstance.canvas.width, 355);
+      ctx.fillText("Perfect: ".concat(this.numPerfect), this.gameInstance.canvas.width, 205);
+      ctx.fillText("Good: ".concat(this.numGood), this.gameInstance.canvas.width, 255);
+      ctx.fillText("Poor: ".concat(this.numPoor), this.gameInstance.canvas.width, 305);
       ctx.closePath();
     }
   }, {

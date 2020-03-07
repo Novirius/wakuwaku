@@ -21,7 +21,7 @@ export default class Stats {
     }
 
     updateHitPercentage () {
-        const hitPercentage = 100*((this.numPerfect + this.numGood + this.numPoor)/(this.numPerfect + this.numGood + this.numPoor + this.numMiss))
+        const hitPercentage = 100*((this.numPerfect + this.numGood + this.numPoor + 0)/(this.numPerfect + this.numGood + this.numPoor + this.numMiss + 0))
         const rounded = Math.floor((hitPercentage*100))/100
         return rounded;
     }
@@ -73,7 +73,9 @@ export default class Stats {
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'right';
         ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
-        // ctx.fillText(`${this.numMiss}`, this.gameInstance.canvas.width, 135);
+        ctx.fillText(`Miss: ${this.numMiss}`, this.gameInstance.canvas.width, 355);
+        ctx.fillText(`Perfect: ${this.numPerfect}`, this.gameInstance.canvas.width, 205);
+        ctx.fillText(`Good: ${this.numGood}`, this.gameInstance.canvas.width, 255);
         ctx.closePath();
     }
 

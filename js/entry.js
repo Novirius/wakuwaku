@@ -8,18 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.globalCompositeOperation = 'destination-over'
     canvas.width = window.innerWidth * 0.9;
     canvas.height = window.innerHeight * 0.9;
-    // document.body.appendChild(canvas);
-    // const game = new GameView(canvas,ctx);
     const welcomeSplash = document.getElementById('welcome-splash')
     const gameoverOverlay = document.getElementById('gameover')
     const playButton = document.getElementById('play-button')
     const retryButton = document.getElementById('retry')
     const countdown = new Audio();
     countdown.src = "assets/music/smash_countdown.mp3";
-    const mainMenuBGM = new Audio();
-    mainMenuBGM.src = "assets/music/mainMenuBGM.mp3";
-    const cursor = document.getElementById('cursor')
-    const cursor2 = document.getElementById('cursor2')
+    const cursor = document.getElementById('cursor');
+    const cursor2 = document.getElementById('cursor2');
     const handleMouseMove = (e) => {
         cursor.setAttribute("style", "top: "+(e.pageY-15)+"px; left: "+(e.pageX-15)+"px;")
     }
