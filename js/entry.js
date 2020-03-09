@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener('mousemove', handleMouseMove)
     const beginGame = () => {
+        const mainMenuBGM = document.getElementById("mainMenuBGM")
+        mainMenuBGM.pause()
         const game = new GameView(canvas,ctx);
         welcomeSplash.classList.add("hide");
         cursor.classList.add("hide");

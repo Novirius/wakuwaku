@@ -270,6 +270,8 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener('mousemove', handleMouseMove);
 
   var beginGame = function beginGame() {
+    var mainMenuBGM = document.getElementById("mainMenuBGM");
+    mainMenuBGM.pause();
     var game = new _game_view_js__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx);
     welcomeSplash.classList.add("hide");
     cursor.classList.add("hide");
@@ -1276,7 +1278,6 @@ function () {
       ctx.fillText("Miss: ".concat(this.numMiss), this.gameInstance.canvas.width, 355);
       ctx.fillText("Perfect: ".concat(this.numPerfect), this.gameInstance.canvas.width, 205);
       ctx.fillText("Good: ".concat(this.numGood), this.gameInstance.canvas.width, 255);
-      ctx.fillText("Poor: ".concat(this.numPoor), this.gameInstance.canvas.width, 305);
       ctx.closePath();
     }
   }, {
