@@ -35,11 +35,11 @@ export default class Stats {
     }
 
     updateGood(number) {
-        this.numGoods += number;
+        this.numGood += number;
     }
 
     updatePoor(number) {
-        this.numPoors += number;
+        this.numPoor += number;
     }
 
     updateMiss(number) {

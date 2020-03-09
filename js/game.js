@@ -98,7 +98,7 @@ export default class Game {
 
         let timer = 1;
         if (this.playTime < 27) {
-            timer = 1.5
+            timer = 1.2
         }
         else if ((this.playTime > 26) && (this.playTime < 40)) {
             timer = 1.3
@@ -145,7 +145,7 @@ export default class Game {
     interactWithOrb () {
         if (this.objects[0] instanceof Orb) {
             if (Math.sqrt((this.mousePosX-this.objects[0].centerX)*(this.mousePosX-this.objects[0].centerX) + (this.mousePosY-this.objects[0].centerY)*(this.mousePosY-this.objects[0].centerY)) < this.objects[0].circleRadius) {
-                if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.1)) && this.clickable) {
+                if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
                     this.clickable = false;
                     this.objects[0].active = 'expire';
                     this.health.perfect();
@@ -154,7 +154,7 @@ export default class Game {
                     this.stats.updatePerfect(1)
                     //perfect points
                 }
-                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.2)) && this.clickable) {
+                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.35)) && this.clickable) {
                     this.clickable = false;
                     this.objects[0].active = 'expire';
                     this.health.good();
@@ -163,7 +163,7 @@ export default class Game {
                     this.stats.updateGood(1)
                     //Good points
                 }
-                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.4)) && this.clickable) {
+                else if ((this.objects[0].ringRadius < (this.objects[0].initialRingRadius * 0.5)) && this.clickable) {
                     this.clickable = false;
                     this.objects[0].active = 'expire';
                     this.health.poor();
@@ -296,6 +296,11 @@ export default class Game {
     }
 
     draw (ctx, dt) {
+        //Test Ring Radius
+        if (this.objects[0] instanceof Orb) {
+            console.log(this.objects[0].ringRadius)
+        }
+        
         //Draw health
         this.health.draw(ctx);
         // particle1.update(ctx);

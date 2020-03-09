@@ -445,7 +445,7 @@ function () {
       var timer = 1;
 
       if (this.playTime < 27) {
-        timer = 1.5;
+        timer = 1.2;
       } else if (this.playTime > 26 && this.playTime < 40) {
         timer = 1.3;
       } else if (this.playTime > 39 && this.playTime < 60) {
@@ -495,21 +495,21 @@ function () {
     value: function interactWithOrb() {
       if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
         if (Math.sqrt((this.mousePosX - this.objects[0].centerX) * (this.mousePosX - this.objects[0].centerX) + (this.mousePosY - this.objects[0].centerY) * (this.mousePosY - this.objects[0].centerY)) < this.objects[0].circleRadius) {
-          if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.1 && this.clickable) {
+          if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
             this.clickable = false;
             this.objects[0].active = 'expire';
             this.health.perfect();
             this.hitSound.play();
             this.stats.updatePoints(1000);
             this.stats.updatePerfect(1); //perfect points
-          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.2 && this.clickable) {
+          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.35 && this.clickable) {
             this.clickable = false;
             this.objects[0].active = 'expire';
             this.health.good();
             this.hitSound.play();
             this.stats.updatePoints(300);
             this.stats.updateGood(1); //Good points
-          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.4 && this.clickable) {
+          } else if (this.objects[0].ringRadius < this.objects[0].initialRingRadius * 0.5 && this.clickable) {
             this.clickable = false;
             this.objects[0].active = 'expire';
             this.health.poor();
@@ -647,7 +647,12 @@ function () {
   }, {
     key: "draw",
     value: function draw(ctx, dt) {
-      //Draw health
+      //Test Ring Radius
+      if (this.objects[0] instanceof _orbs__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+        console.log(this.objects[0].ringRadius);
+      } //Draw health
+
+
       this.health.draw(ctx); // particle1.update(ctx);
 
       this.objects.forEach(function (object) {
@@ -1232,12 +1237,12 @@ function () {
   }, {
     key: "updateGood",
     value: function updateGood(number) {
-      this.numGoods += number;
+      this.numGood += number;
     }
   }, {
     key: "updatePoor",
     value: function updatePoor(number) {
-      this.numPoors += number;
+      this.numPoor += number;
     }
   }, {
     key: "updateMiss",
