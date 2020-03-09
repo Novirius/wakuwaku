@@ -72,10 +72,12 @@ export default class Stats {
         ctx.fillStyle = 'white';
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'right';
-        ctx.fillText(`${this.updateHitPercentage()}%`, this.gameInstance.canvas.width, 135);
-        ctx.fillText(`Miss: ${this.numMiss}`, this.gameInstance.canvas.width, 355);
+        const accuracy = this.updateHitPercentage() >= 0 ? this.updateHitPercentage() : 0;
+        ctx.fillText(`${accuracy}%`, this.gameInstance.canvas.width, 135);
         ctx.fillText(`Perfect: ${this.numPerfect}`, this.gameInstance.canvas.width, 205);
         ctx.fillText(`Good: ${this.numGood}`, this.gameInstance.canvas.width, 255);
+        ctx.fillText(`Poor: ${this.numPoor}`, this.gameInstance.canvas.width, 305);
+        ctx.fillText(`Miss: ${this.numMiss}`, this.gameInstance.canvas.width, 355);
         ctx.closePath();
     }
 

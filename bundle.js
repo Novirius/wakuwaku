@@ -1274,10 +1274,12 @@ function () {
       ctx.fillStyle = 'white';
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'right';
-      ctx.fillText("".concat(this.updateHitPercentage(), "%"), this.gameInstance.canvas.width, 135);
-      ctx.fillText("Miss: ".concat(this.numMiss), this.gameInstance.canvas.width, 355);
+      var accuracy = this.updateHitPercentage() >= 0 ? this.updateHitPercentage() : 0;
+      ctx.fillText("".concat(accuracy, "%"), this.gameInstance.canvas.width, 135);
       ctx.fillText("Perfect: ".concat(this.numPerfect), this.gameInstance.canvas.width, 205);
       ctx.fillText("Good: ".concat(this.numGood), this.gameInstance.canvas.width, 255);
+      ctx.fillText("Poor: ".concat(this.numPoor), this.gameInstance.canvas.width, 305);
+      ctx.fillText("Miss: ".concat(this.numMiss), this.gameInstance.canvas.width, 355);
       ctx.closePath();
     }
   }, {
