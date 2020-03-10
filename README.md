@@ -8,8 +8,6 @@ Wakuwaku is an eye-hand coordination game. The user interactions with onscreen o
 When you first load Wakuwaku, you will be greeted with an instructional page. Pressing 'play' will initiate the game with a countdown.
 
 ## The HUD
-![Image of HUD during gameplay](https://i.imgur.com/DX3TW6U.png)
-
 #### Orbs
 <img src="https://i.imgur.com/oNWDcyc.png" width="500" />
 Orbs should be tapped once the outer ring nears the silver lining of the orb. Clicking  or pressing 'z' or 'x' while the mouse is hovered over an orb will tap the orb if the ring is within a certain distance from the perimeter of the circle. Doing so will play a taiko drum sound, replenish health, and add points to the user's score.
