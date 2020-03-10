@@ -10,7 +10,42 @@ When you first load Wakuwaku, you will be greeted with an instructional page. Pr
 ## The HUD
 #### Orbs
 <img src="https://i.imgur.com/oNWDcyc.png" width="500" />
-Orbs should be tapped once the outer ring nears the silver lining of the orb. Clicking  or pressing 'z' or 'x' while the mouse is hovered over an orb will tap the orb if the ring is within a certain distance from the perimeter of the circle. Doing so will play a taiko drum sound, replenish health, and add points to the user's score.
+Orbs should be tapped once the outer ring nears the silver lining of the orb. Clicking  or pressing 'z' or 'x' while the mouse is hovered over an orb will tap the orb if the ring is within a certain distance from the perimeter of the circle. Doing so will play a taiko drum sound, replenish health, and add points to the user's score. These orbs were constructed using Canvas HTML5 as seen in the code snippet below:
+
+```javascript
+    activeOrb(ctx, dt) {
+        //Timer Animation
+        ctx.beginPath();
+        ctx.arc(this.centerX, this.centerY, this.timerSize(dt), 0, 2 * Math.PI);
+        ctx.lineWidth = 5;
+        let grd2 = ctx.createLinearGradient(50, 0, 0, 220);
+        CONSTANT[this.color].timerLight(grd2);
+        CONSTANT[this.color].timerDark(grd2);
+        ctx.strokeStyle = grd2;
+        ctx.stroke();
+        ctx.closePath();
+        // //Circle
+        ctx.beginPath();
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.arc(this.centerX, this.centerY, this.circleRadius, 0, 2 * Math.PI);
+        let grd = ctx.createRadialGradient(this.centerX, this.centerY, this.circleRadius, this.centerX, this.centerY, 20);
+        CONSTANT[this.color].circleLight(grd, this.alpha);
+        CONSTANT[this.color].circleDark(grd, this.alpha);
+        ctx.fillStyle = grd;
+        ctx.fill();
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = CONSTANT[this.color].circleEdge;
+        ctx.stroke();
+        ctx.save();
+        ctx.closePath();
+        //Text font, color, and positioning
+        ctx.font = "30px Sans-Serif";
+        ctx.fillStyle = 'white';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.centerX, this.centerY);
+    }
+  ```
 
 
 #### Health Bar, Score, and Accuracy
